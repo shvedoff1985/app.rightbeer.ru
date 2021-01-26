@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+<title>Fullscreen HTML5 Page Background Video – Indigo</title>
+
+	<link rel="stylesheet" href="reset.css">
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script src="js/jquery.js"></script>
+	<script src="js/bootstrap.min.js"></script>
+	<script src="js/jquery.maskedinput.js">
+	<script>
+		$('#phoneNumber').inputmask("(999) 999-9999");
+	</script>
+</head>
+<body>
+<video autoplay loop muted class="bgvideo" id="bgvideo">
+	<source src="bg/beer.mp4" type="video/mp4"></source>
+</video>
+<audio autoplay>
+	<source src="bg/beer.ogg" type="audio/ogg">
+	<source src="bg/beer.mp3" type="audio/mpeg">
+</audio>
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-12 logo"><img src="bg/logo.png" class="mx-auto d-block p-3" /></div>
+
+		<div class="col-12 p-4 text-center pole-form">
+			<form>
+				<div class="form-group">
+					<input type="text" class="form-control" name="phoneNumber" id="phoneNumber" value="+7 (999) 999-9999">
+					<small id="emailHelp" class="form-text text-black-90">Для авторизации в личном кабинете пожалуйста введите свой номер телефона.</small>
+				</div>
+				<button type="submit" class="btn btn-success">Авторизоваться</button>
+			</form>
+		</div>
+	</div>
+</div>
+        <script src="cordova.js"></script>
+        <script src="js/index.js"></script>
+</body>
+</html>
