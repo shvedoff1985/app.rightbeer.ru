@@ -1,44 +1,81 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
-<title>Fullscreen HTML5 Page Background Video – Indigo</title>
-
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
+	<title>Fullscreen HTML5 Page Background Video – Indigo</title>
 	<link rel="stylesheet" href="reset.css">
 	<link rel="stylesheet" href="style.css">
 	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link href="css/all.css" rel="stylesheet">
+
 	<script src="js/jquery.js"></script>
 	<script src="js/bootstrap.min.js"></script>
-	<script src="js/jquery.maskedinput.js">
-	<script>
-		$('#phoneNumber').inputmask("(999) 999-9999");
-	</script>
+	<script src="js/jquery.maskedinput.js"></script>
+
 </head>
 <body>
-<video autoplay loop muted class="bgvideo" id="bgvideo">
-	<source src="bg/beer.mp4" type="video/mp4"></source>
-</video>
-<audio autoplay>
-	<source src="bg/beer.ogg" type="audio/ogg">
-	<source src="bg/beer.mp3" type="audio/mpeg">
-</audio>
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-12 logo"><img src="bg/logo.png" class="mx-auto d-block p-3" /></div>
+	<video autoplay="" loop="" muted=""  width="0" height="0">
+		<source  src=bg/beer.mp4 type=video/mp4>
+	</video>
+	<audio autoplay>
+		<source src="bg/beer.ogg" type="audio/ogg">
+		<source src="bg/beer.mp3" type="audio/mpeg">
+	</audio>
+	<canvas class="bgvideo">
+		
+	</canvas>
+	
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-12 logo"><img src="bg/logo.png" class="mx-auto d-block p-3" /></div>
 
-		<div class="col-12 p-4 text-center pole-form">
-			<form>
-				<div class="form-group">
-					<input type="text" class="form-control" name="phoneNumber" id="phoneNumber" value="+7 (999) 999-9999">
-					<small id="emailHelp" class="form-text text-black-90">Для авторизации в личном кабинете пожалуйста введите свой номер телефона.</small>
+			<div class="col-12 p-4 text-center pole-form">
+				<form>
+					<div class="form-group">
+						<input type="text" class="form-control" name="phoneNumber" id="phoneNumber" value="+7 (999) 999-9999">
+						<small id="emailHelp" class="form-text text-black-90">Для авторизации в личном кабинете пожалуйста введите свой номер телефона.</small>
+					</div>
+					<button type="submit" class="btn btn-success">Авторизоваться</button>
+				</form>
+			</div>
+
+			<div class="col-12 p-4 text-center bottom-menu">
+				<div class="row">
+					<div class="col-4">Вход<i class="fas fa-user"></i></div>
+					<div class="col-4">Новости</div>
+					<div class="col-4">Карта</div>
 				</div>
-				<button type="submit" class="btn btn-success">Авторизоваться</button>
-			</form>
+			</div>
 		</div>
 	</div>
-</div>
-        <script src="cordova.js"></script>
-        <script src="js/index.js"></script>
+    <script src="cordova.js"></script>
+    <script src="js/index.js"></script>
+    <script type="text/javascript">
+		$('#phoneNumber').inputmask("+7 (999) 999-9999");
+	</script>
+	<script type="text/javascript">
+		var fps = 60
+		var mediaWidth = window.innerWidth
+		var mediaHeight = window.innerHeight
+
+		$(".container-fluid").height(window.innerHeight-24)
+		document.addEventListener('DOMContentLoaded', function() {
+		  var video = document.getElementsByTagName('video')[0]
+		  var canvas = document.getElementsByTagName('canvas')[0]
+		  var context = canvas.getContext('2d')
+		  canvas.width = mediaWidth
+		  canvas.height = mediaHeight
+		  video.addEventListener('play', function() {
+		    draw(this, context, mediaWidth, mediaHeight)
+		  }, false)
+		}, false)
+
+		function draw(v, c, w, h) {
+		  if (v.paused || v.ended) return false
+		  c.drawImage(v, 0, 0, w, h)
+		  setTimeout(draw, 1000 / fps, v, c, w, h)
+		}
+	</script>
 </body>
 </html>

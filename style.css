@@ -12,6 +12,9 @@ body {
 	width: auto;
 	height: auto;
 	z-index: -9999;
+	background-image: url(bg.png);
+	background-size: 100% 100%;
+	background-position: center center;
 }
 
 .logo img {
@@ -21,4 +24,25 @@ body {
 
 .pole-form {
 	margin-top: 70px;
+}
+
+
+.bottom-menu {
+	position: absolute !important;
+	bottom: 0 !important;
+	height: 75px;
+	background-color: white;
+	border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
+}
+
+body {
+	height: 100%;
+}
+
+.container-fluid {
+	height: 100%;
+}
+.container-fluid > .row {
+	height: 100%;
 }
