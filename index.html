@@ -81,20 +81,20 @@
 		var fps = 60
 		var mediaWidth = window.innerWidth
 		var mediaHeight = window.innerHeight
+		var height_menu = "calc("+window.innerHeight+"px - 75px)"
+
+		$(".bottom-menu").css("top", height_menu);
 
 
+		$('#phoneNumber').on('focus', () => {
+				$(".bottom-menu").css("top", height_menu);
+		});
 
-		setInterval(function(){
-
-			document.getElementById('te1').innerHTML = 'Width экрана - '+window.screen.width;
-			document.getElementById('te2').innerHTML = 'height экрана - '+window.screen.height;
-			document.getElementById('te3').innerHTML = 'Width браузера - '+window.innerWidth;
-			document.getElementById('te4').innerHTML = 'height браузера - '+window.innerHeight;
-
-		}, 1000);
+		$('#phoneNumber').on('blur', () => {
+		    $(".bottom-menu").css("top", height_menu);
+		});
 
 
-		$(".bottom-menu").css("top", "calc("+window.screen.height+"px - 75px)");
 		$(".container-fluid").height(window.innerHeight-24);
 		document.addEventListener('DOMContentLoaded', function() {
 		  var video = document.getElementsByTagName('video')[0]
