@@ -23,9 +23,9 @@
 		<source src="bg/beer.mp3" type="audio/mpeg">
 	</audio>
 	<canvas class="bgvideo">
-		
+
 	</canvas>
-	
+
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-12 logo"><img src="bg/logo.png" class="mx-auto d-block p-2" /></div>
@@ -68,8 +68,13 @@
 		var fps = 60
 		var mediaWidth = window.innerWidth
 		var mediaHeight = window.innerHeight
+		var menu_top = "calc("+window.innerHeight+"px - 75px)"
 
-		$(".container-fluid").height(window.innerHeight-24)
+
+
+
+		$(".bottom-menu").css("top", "calc("+window.innerHeight+"px - 75px)");
+		$(".container-fluid").height(window.innerHeight-24);
 		document.addEventListener('DOMContentLoaded', function() {
 		  var video = document.getElementsByTagName('video')[0]
 		  var canvas = document.getElementsByTagName('canvas')[0]

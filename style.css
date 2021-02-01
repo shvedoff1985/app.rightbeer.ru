@@ -3,6 +3,10 @@ body {
 	background-size: cover;
 }
 
+video {
+	position: absolute;
+}
+
 .bgvideo {
 	position: fixed;
 	right: 0;
@@ -29,7 +33,6 @@ body {
 
 .bottom-menu {
 	position: absolute !important;
-	bottom: 0 !important;
 	height: 75px;
 	background-color: #000000;
 	border-top-left-radius: 15px;
