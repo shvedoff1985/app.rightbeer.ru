@@ -13,6 +13,7 @@
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/jquery.maskedinput.js"></script>
 
+
 </head>
 <body>
 	<video autoplay="" loop="" muted=""  width="0" height="0">
@@ -81,18 +82,25 @@
 		var fps = 60
 		var mediaWidth = window.innerWidth
 		var mediaHeight = window.innerHeight
+
 		var height_menu = "calc("+window.innerHeight+"px - 75px)"
 
 		$(".bottom-menu").css("top", height_menu);
 
 
 		$('#phoneNumber').on('focus', () => {
-				$(".bottom-menu").css("top", height_menu);
+			alert('123');
+				$(".bottom-menu").css("top", "calc("+window.innerHeight+"px - 75px)");
 		});
 
 		$('#phoneNumber').on('blur', () => {
-		    $(".bottom-menu").css("top", height_menu);
+			alert('321');
+				$(".bottom-menu").css("top", "calc("+window.innerHeight+"px - 75px)");
 		});
+
+
+		let timerId = setInterval(() => $(".bottom-menu").css("top", "calc("+window.innerHeight+"px - 75px)"), 1000);
+		setTimeout(() => { clearInterval(timerId); }, 1000);
 
 
 		$(".container-fluid").height(window.innerHeight-24);
