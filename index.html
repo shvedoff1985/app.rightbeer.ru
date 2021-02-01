@@ -28,7 +28,20 @@
 
 	<div class="container-fluid">
 		<div class="row">
-			<div class="col-12 logo"><img src="bg/logo.png" class="mx-auto d-block p-2" /></div>
+			<div class="col-12 logo"><img src="bg/logo.png" class="mx-auto d-block p-2" />
+				<p id="te1">
+
+				</p>
+				<p id="te2">
+
+				</p>
+				<p id="te3">
+
+				</p>
+				<p id="te4">
+
+				</p>
+			</div>
 
 			<div class="col-12 p-2 text-center pole-form">
 				<form>
@@ -68,12 +81,20 @@
 		var fps = 60
 		var mediaWidth = window.innerWidth
 		var mediaHeight = window.innerHeight
-		var menu_top = "calc("+window.innerHeight+"px - 75px)"
 
 
 
+		setInterval(function(){
 
-		$(".bottom-menu").css("top", "calc("+window.innerHeight+"px - 75px)");
+			document.getElementById('te1').innerHTML = 'Width экрана - '+window.screen.width;
+			document.getElementById('te2').innerHTML = 'height экрана - '+window.screen.height;
+			document.getElementById('te3').innerHTML = 'Width браузера - '+window.innerWidth;
+			document.getElementById('te4').innerHTML = 'height браузера - '+window.innerHeight;
+
+		}, 1000);
+
+
+		$(".bottom-menu").css("top", "calc("+window.screen.height+"px - 75px)");
 		$(".container-fluid").height(window.innerHeight-24);
 		document.addEventListener('DOMContentLoaded', function() {
 		  var video = document.getElementsByTagName('video')[0]
