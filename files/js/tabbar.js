@@ -11,4 +11,4 @@ setInterval(function(){
 	if(tabbar < $(document).height()) {
 		$("#tabbar").css("top",$(document).height()-72);
 	}
-}, 100);
+}, 50);

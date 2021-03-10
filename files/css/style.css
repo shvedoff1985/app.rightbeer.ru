@@ -8,6 +8,11 @@
 
 body {
 	font-family: "Roboto";
+	
+}
+
+.shadow-box {
+	box-shadow: 0 0 3px 0.1px silver;
 }
 
 #statusbar {
@@ -17,7 +22,12 @@ body {
 	background-color: #896043;
 	position: absolute;
 	z-index: 10;
-	box-shadow: 0 0 3px 0.1px silver;
+}
+
+#layout[page='login'] {
+	background-image: url(../images/logo_bg.jpg);
+	background-position: center center;
+	background-size: 100% 100%;
 }
 
 #statusbar .name-layout {
@@ -28,12 +38,11 @@ body {
 
 #tabbar {
 	width: 100%;
-	background-color: #f8f8f8; 
+	background-color: #ffffff; 
 	height: 72px;
 	position: fixed;
 	z-index: 10;
 	bottom: 0;
-	box-shadow: 0 0 3px 0.1px silver;
 }
 
 #tabbar nav .button {
@@ -44,6 +53,10 @@ body {
 }
 
 #tabbar nav .button .name {
+	position: absolute;
+	width: calc(100% / 4);
+	bottom: 0;
+	margin-bottom: 9px;
 	font-size: 14px;
 	color: #858585;
 }
@@ -72,12 +85,87 @@ body {
 	width: 100%;
 }
 
+#layout .logo img {
+	width: calc(100% - (85px * 2));
+	padding: 40px 85px;
+}
+
+
 #layout .box-login {
 	position: absolute;
-	width: 100%;
-	height: 400px;
-	background-color: black;
+	width: calc(100% - 50px);
+	height: 250px;
+	background-color: #ebebeb;
 	bottom: 0;
 	border-top-left-radius: 30px;
 	border-top-right-radius: 30px;
+	padding: 25px 25px 0 25px;
+}
+#layout .box-login .back-call {
+	font-size: 12px;
+	margin-top: 20px;
+	width: 100%;
+	text-align: center;
+	color: #66a3ff;
+}
+
+#layout .box-login .back-call > a {
+	color: #3399ff;
+	text-decoration: underline;
+}
+
+
+
+
+
+
+
+
+
+
+
+.input-group {
+
+}
+
+.input-group label {
+	text-align: left;
+	float: left;
+	width: calc(100% - 2px);
+	font-size: 12px;
+	color: #696969;
+}
+
+.input-group input {
+	height: 46px;
+	margin-top: 10px; 
+	width: calc(100% - 22px);
+	border: none;
+	padding-left: 20px;
+}
+
+.input-group input[type=submit] {
+	height: 46px;
+	margin-top: 10px; 
+	width: 100%;
+	border: none;
+	padding-left: 0px;
+	font-size: 14px;
+	color: white;
+	background-color: #b28564
+}
+
+.input-group input[type=submit]:active {
+	height: 46px;
+	margin-top: 10px; 
+	width: 100%;
+	border: none;
+	padding-left: 0px;
+	font-size: 14px;
+	color: white;
+	background-color: #78543b
+}
+
+.input-group input::placeholder {
+	color: #c1c8c9;
 }
