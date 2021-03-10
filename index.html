@@ -9,6 +9,16 @@
 	<script type="text/javascript" src="files/js/imask.js"></script>
 </head>
 <body>
+	<div id="overlay">
+		<div class="PIN">
+			<div class="input-group">
+				<label>Введите код подтверждения (последние 4 цифры входящего звонка)</label>
+				<input id="pin-mask" type="" name="" placeholder="_-_-_-_">
+			</div>
+
+		</div>
+		<div class="close" onclick="CloseOverlay()"><i class="far fa-times-circle"></i></div>
+	</div>
 	<page mobile-app="right-beer">
 		<div id="statusbar" class="shadow-box">
 			<div class="next"></div>
@@ -24,7 +34,7 @@
 					<input id="phone-mask" type="" name="" placeholder="+7 (___) ___-__-__">
 				</div>
 				<div class="input-group">
-					<input type="submit" class="shadow-box" name="" value="Войти">
+					<input onclick="login()" id="submit-mask" type="submit" class="shadow-box" name="" value="Войти" disabled="disabled">
 				</div>
 				<div class="back-call">
 					<a  href="tel:+79998886655">Обратная связь</a>
@@ -66,7 +76,15 @@
 				mask: '+7 (000) 000-00-00'
 			}
 		);
+		var regExpMask = IMask(
+		  	document.getElementById('pin-mask'),
+		  	{
+		    	mask: '0-0-0-0'
+		  	}
+		);
+		
 	</script>
 	<script type="text/javascript" src="files/js/tabbar.js"></script>
+	<script type="text/javascript" src="files/js/login.js"></script>
 </body>
 </html>

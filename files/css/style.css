@@ -33,7 +33,8 @@ body {
 #statusbar .name-layout {
 	color: white;
 	font-size: 20px;
-	margin: 15.5px 20px 0;
+	font-weight: 400;
+	margin: 16px 20px 0;
 }
 
 #tabbar {
@@ -94,7 +95,7 @@ body {
 #layout .box-login {
 	position: absolute;
 	width: calc(100% - 50px);
-	height: 250px;
+	height: 180px;
 	background-color: #ebebeb;
 	bottom: 0;
 	border-top-left-radius: 30px;
@@ -114,19 +115,6 @@ body {
 	text-decoration: underline;
 }
 
-
-
-
-
-
-
-
-
-
-
-.input-group {
-
-}
 
 .input-group label {
 	text-align: left;
@@ -155,6 +143,11 @@ body {
 	background-color: #b28564
 }
 
+.input-group input[disabled=disabled] {
+	color: white;
+	background-color: #d6bca9
+}
+
 .input-group input[type=submit]:active {
 	height: 46px;
 	margin-top: 10px; 
@@ -166,6 +159,39 @@ body {
 	background-color: #78543b
 }
 
-.input-group input::placeholder {
+.PIN input {
+	padding-left: 0;
+	font-size: 25px;
+}
+.PIN input::placeholder {
 	color: #c1c8c9;
+}
+
+
+
+#overlay {
+	position: absolute;
+	z-index: 21;
+	background-color: rgba(0, 0, 0, 0.5);;
+	width: 100%;
+	display: none;
+}
+
+#overlay .PIN {
+	width: calc(100% - (75px * 2));
+	margin: 0 50px;
+	background-color: #ebebeb;
+	border-radius: 30px;
+	padding: 25px 25px 35px 25px;
+}
+
+#overlay .PIN input {
+	text-align: center;
+}
+
+#overlay .close {
+	text-align: center;
+	font-size: 35px;
+	margin-top: 30px;
+	color: #ff4d4d;
 }
