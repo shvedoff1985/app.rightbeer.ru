@@ -5,27 +5,18 @@
 	<link rel="stylesheet" type="text/css" href="files/css/style.css">
 	<meta name="viewport" content="width=device-width">
 	<title></title>
+	<meta charset="utf-8" />
 	<script type="text/javascript" src="files/js/JQ.js"></script>
 	<script type="text/javascript" src="files/js/imask.js"></script>
 </head>
 <body>
-	<div id="overlay">
-		<div class="PIN">
-			<div class="input-group">
-				<label>Введите код подтверждения (последние 6 цифр входящего звонка)</label>
-				<input id="pin-mask" type="" name="" placeholder="_-_-_-_-_-_">
-			</div>
-
-		</div>
-		<div class="close" onclick="CloseOverlay()"><i class="far fa-times-circle"></i></div>
-	</div>
 	<page mobile-app="right-beer">
 		<div id="statusbar" class="shadow-box">
 			<div class="next"></div>
-			<div class="name-layout">RightBeer | Авторизация</div>
+			<div class="name-layout">RightBeer | Карты</div>
 		</div>
 		<div id="layout" page="map">
-
+			<div><iframe src="https://yandex.ru/map-widget/v1/-/CCgUn2yb" frameborder="0" allowfullscreen="true" style="position:relative;" id="map"></iframe></div>
 		</div>
 		<div id="tabbar" class="shadow-box">
 			<nav>
