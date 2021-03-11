@@ -8,7 +8,7 @@
 	<meta charset="utf-8" />
 	<script type="text/javascript" src="files/js/JQ.js"></script>
 	<script type="text/javascript" src="files/js/imask.js"></script>
-	<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+	<script src="https://api-maps.yandex.ru/2.1/?apikey=4589713e-a8e5-4019-bd5a-e4de5fb76b1d&lang=ru_RU" type="text/javascript"></script>
 </head>
 <body>
 	<page mobile-app="right-beer">
@@ -17,7 +17,7 @@
 			<div class="name-layout">RightBeer | Карты</div>
 		</div>
 		<div id="layout" page="map">
-			<div id="map_canvas"></div>
+			<div id="map" style="width: 100%; height: 100%"></div>
 		</div>
 		<div id="tabbar" class="shadow-box">
 			<nav>
@@ -65,17 +65,52 @@
 	<script type="text/javascript" src="files/js/tabbar.js"></script>
 	<script type="text/javascript" src="files/js/login.js"></script>
 	<script type="text/javascript" src="cordova.js"></script>
-<!-- Создаём карту -->
-<script type="text/javascript">
-	function initialize() {
-		var myLatlng = new google.maps.LatLng(-34.397, 150.644);
-		var myOptions = {
-			zoom: 8,
-			center: myLatlng,
-			mapTypeId: google.maps.MapTypeId.ROADMAP
+	<script type="text/javascript">
+		ymaps.ready(init);
+
+		function init() {
+			var geolocation = ymaps.geolocation,
+					myMap = new ymaps.Map('map', {
+						center: [55, 34],
+						zoom: 10
+					}, {
+						searchControlProvider: 'yandex#search'
+					});
+
+			// Сравним положение, вычисленное по ip пользователя и
+			// положение, вычисленное средствами браузера.
+			geolocation.get({
+				provider: 'yandex',
+				mapStateAutoApply: true
+			}).then(function (result) {
+				// Красным цветом пометим положение, вычисленное через ip.
+				result.geoObjects.options.set('preset', 'islands#redCircleIcon');
+				result.geoObjects.get(0).properties.set({
+					balloonContentBody: 'Мое местоположение'
+				});
+				myMap.geoObjects.add(result.geoObjects);
+			});
+
+
+			placemark1 = new ymaps.Placemark([51.648817, 39.195831], {
+				hintContent: "Воронеж, 20 летия октября, 66",
+				iconContent: "",
+			}, {
+				preset: "islands#blueDotIcon",
+				iconColor: "#1e98ff"
+			});
+
+			placemark2 = new ymaps.Placemark([51.693753, 39.144978], {
+				hintContent: "Воронеж, 45 СтрДивизии, 226",
+				iconContent: "",
+			}, {
+				preset: "islands#blueDotIcon",
+				iconColor: "#1e98ff"
+			});
+
+			myMap.geoObjects.add(placemark1).add(placemark2)
+			myMap.geoObjects.add(placemark2)
 		}
-		var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-	}
-</script>
+	</script>
 </body>
 </html>
