@@ -1,63 +1,58 @@
 <!DOCTYPE html>
 <html>
-<head>
-	<script defer src="files/fontawesome/js/all.js"></script>
-	<link rel="stylesheet" type="text/css" href="files/css/style.css">
-	<meta name="viewport" content="width=device-width">
-	<meta charset="utf-8" />
-	<script type="text/javascript" src="files/js/JQ.js"></script>
-	<script type="text/javascript" src="files/js/imask.js"></script>
-
-	<metajs>
-
-	</metajs>
-
-</head>
-<body>
-	<div id="preload-main">
-		<img src="files/images/logo-dark.png" />
-	</div>
-	<div id="overlay"></div>
-	<page id="page" mobile-app="right-beer">
-		<div id="statusbar" class="shadow-box">
-			<div class="next"></div>
-			<div class="name-layout">RightBeer | <font class="name"></font><font class="exit"></font></div>
-		</div>
-		<div id="layout" page="login">
-
-		</div>
-		<div id="tabbar" class="shadow-box">
-			<nav>
-				<div class="login profile">
-					<div onclick="login()" class="button active">
-						<div class="icon"><i class="far fa-user-circle"></i></div>
-						<div class="name">Войти</div>
-					</div>
-				</div>
-				<div class="news">
-					<div onclick="news()" class="button">
-						<div class="icon"><i class="far fa-newspaper"></i></div>
-						<div class="name">Новости</div>
-					</div>
-				</div>
-				<div onclick="stocks()" class="stocks">
-					<div class="button">
-						<div class="icon"><i class="fas fa-tags"></i></div>
-						<div class="name">Акции</div>
-					</div>
-				</div>
-				<div onclick="map()" class="map">
-					<div class="button">
-						<div class="icon"><i class="far fa-map"></i></div>
-						<div class="name">Карта</div>
-					</div>
-				</div>
-			</nav>
-		</div>
-	</page>
-	<script type="text/javascript" src="files/js/main.js"></script>
-	<script type="text/javascript" src="files/js/tabbar.js"></script>
-
-	<script type="text/javascript" src="cordova.js"></script>
-</body>
+    <head>
+        <script defer src="files/fontawesome/js/all.js"></script>
+        <link rel="stylesheet" type="text/css" href="files/css/style.css">
+        <meta name="viewport" content="width=device-width">
+        <meta charset="utf-8" />
+        <script type="text/javascript" src="files/js/JQ.js"></script>
+        <script type="text/javascript" src="files/js/imask.js"></script>
+        <metajs>
+        </metajs>
+    </head>
+    <body>
+        <div id="preload-main">
+            <img src="files/images/logo-dark.png" />
+        </div>
+        <div id="overlay"></div>
+        <page id="page" mobile-app="right-beer">
+            <div id="statusbar" class="shadow-box">
+                <div class="next"></div>
+                <div class="name-layout">RightBeer | <font class="name"></font><font class="exit"></font></div>
+            </div>
+            <div id="layout" page="login">
+            </div>
+            <div id="tabbar" class="shadow-box">
+                <nav>
+                    <div class="login profile">
+                        <div onclick="login()" class="button active">
+                            <div class="icon"><i class="far fa-user-circle"></i></div>
+                            <div class="name">Войти</div>
+                        </div>
+                    </div>
+                    <div class="news">
+                        <div onclick="news()" class="button">
+                            <div class="icon"><i class="far fa-newspaper"></i></div>
+                            <div class="name">Новости</div>
+                        </div>
+                    </div>
+                    <div onclick="stocks()" class="stocks">
+                        <div class="button">
+                            <div class="icon"><i class="fas fa-tags"></i></div>
+                            <div class="name">Акции</div>
+                        </div>
+                    </div>
+                    <div onclick="map()" class="map">
+                        <div class="button">
+                            <div class="icon"><i class="far fa-map"></i></div>
+                            <div class="name">Карта</div>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+        </page>
+        <script type="text/javascript" src="files/js/main.js"></script>
+        <script type="text/javascript" src="files/js/tabbar.js"></script>
+        <script type="text/javascript" src="cordova.js"></script>
+    </body>
 </html>
