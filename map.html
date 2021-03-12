@@ -66,50 +66,67 @@
 	<script type="text/javascript" src="files/js/login.js"></script>
 	<script type="text/javascript" src="cordova.js"></script>
 	<script type="text/javascript">
-		ymaps.ready(init);
+		document.addEventListener("deviceready", onDeviceReady, false);
 
-		function init() {
-			var geolocation = ymaps.geolocation,
-					myMap = new ymaps.Map('map', {
-						center: [55, 34],
-						zoom: 10
+		function onDeviceReady() {
+
+			options = {
+				maximumAge: 30000,
+				timeout: 5000,
+				enableHighAccuracy: true
+			};
+
+
+			var onSuccess = function(position) {
+
+
+
+				ymaps.ready(init);
+
+				function init() {
+					var geolocation = ymaps.geolocation,
+							myMap = new ymaps.Map('map', {
+								center: [position.coords.latitude, position.coords.longitude],
+								zoom: 17
+							}, {
+								searchControlProvider: 'yandex#search'
+							});
+
+
+					placemark1 = new ymaps.Placemark([51.648817, 39.195831], {
+						hintContent: "Воронеж, 20 летия октября, 66"
 					}, {
-						searchControlProvider: 'yandex#search'
+						preset: "islands#greenShoppingIcon"
 					});
 
-			// Сравним положение, вычисленное по ip пользователя и
-			// положение, вычисленное средствами браузера.
-			geolocation.get({
-				provider: 'yandex',
-				mapStateAutoApply: true
-			}).then(function (result) {
-				// Красным цветом пометим положение, вычисленное через ip.
-				result.geoObjects.options.set('preset', 'islands#redCircleIcon');
-				result.geoObjects.get(0).properties.set({
-					balloonContentBody: 'Мое местоположение'
-				});
-				myMap.geoObjects.add(result.geoObjects);
-			});
+					placemark2 = new ymaps.Placemark([51.693753, 39.144978], {
+						hintContent: "Воронеж, 45 СтрДивизии, 226"
+					}, {
+						preset: "islands#greenShoppingIcon"
+					});
+
+					placemark3 = new ymaps.Placemark([position.coords.latitude, position.coords.longitude], {
+						hintContent: "Воронеж, 45 СтрДивизии, 226"
+					}, {
+						preset: "islands#geolocationIcon"
+					});
+
+					myMap.geoObjects.add(placemark1).add(placemark2).add(placemark3)
+				}
 
 
-			placemark1 = new ymaps.Placemark([51.648817, 39.195831], {
-				hintContent: "Воронеж, 20 летия октября, 66",
-				iconContent: "",
-			}, {
-				preset: "islands#blueDotIcon",
-				iconColor: "#1e98ff"
-			});
+			};
 
-			placemark2 = new ymaps.Placemark([51.693753, 39.144978], {
-				hintContent: "Воронеж, 45 СтрДивизии, 226",
-				iconContent: "",
-			}, {
-				preset: "islands#blueDotIcon",
-				iconColor: "#1e98ff"
-			});
 
-			myMap.geoObjects.add(placemark1).add(placemark2)
-			myMap.geoObjects.add(placemark2)
+
+			function onError(error) {
+				alert('????');
+				alert('code: '    + error.code    + '\n' +
+						'message: ' + error.message + '\n');
+			}
+
+			navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
+
 		}
 	</script>
 </body>
