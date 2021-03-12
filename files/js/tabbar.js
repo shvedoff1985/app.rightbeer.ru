@@ -10,8 +10,8 @@ window.onload = function() {
 };
 
 setInterval(function(){
-    $("#layout").css("height",$(document).height()-55);
+    $("#layout[page='login']").css("height",$(document).height()-55);
     if(tabbar < $(document).height()) {
-        $("#tabbar").css("top",$(document).height()-72);
+        //$("#tabbar").css("top",$(document).height()-72);
     }
 }, 100);

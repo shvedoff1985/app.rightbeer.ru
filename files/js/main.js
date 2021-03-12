@@ -92,7 +92,6 @@ $(document).ready ( function(){
                 pincode = pincode.split('-').join('');
                 pin = pin.code;
                 pin = pin.substr(2, 6);
-                console.log(pin.code+'-'+pin);
                 if (pincode == pin) {
                     localStorage.account = 'login';
                     $("#overlay").css("display", 'none');
@@ -192,6 +191,9 @@ function login() {
                 pin = pin.substr(2, 6);
                 console.log(pin.code+'-'+pin);
                 if (pincode == pin) {
+                    localStorage.account = 'login';
+                    $("#overlay").css("display", 'none');
+                    $("#overlay").html('');
                     profile();
                 }else{
                     alert('Неверный код');
@@ -232,7 +234,7 @@ function profile() {
         <img src="files/images/logo-light.png" width="200">\
     </div>'
     );
-
+    console.log(localStorage.account);
     //Нижний юлок
     $(".button").removeClass('active');
     if (localStorage.account == "login") {
@@ -266,8 +268,8 @@ function news() {
     $(".name-layout .name").html('Новости');
     //Загрузка контента
     $("#layout").html(
-    '<div class="logo">\
-        <img src="files/images/logo-light.png" width="200">\
+    '<div class="card">\
+        Card\
     </div>'
     );
 

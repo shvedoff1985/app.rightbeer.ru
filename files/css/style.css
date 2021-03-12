@@ -19,7 +19,7 @@ body {
 	height: 55px;
 	top: 0;
 	background-color: #896043;
-	position: absolute;
+	position: fixed;
 	z-index: 10;
 }
 
@@ -39,7 +39,7 @@ body {
 	color: white;
 	font-size: 20px;
 	font-weight: 400;
-	margin: 16px 20px 0;
+	margin: 18px 20px 0;
 }
 
 
