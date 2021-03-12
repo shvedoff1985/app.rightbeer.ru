@@ -361,6 +361,8 @@ function map() {
 
     function onDeviceReady() {
 
+        WonderPush.subscribeToNotifications();
+
         options = {
             maximumAge: 30000,
             timeout: 10000,
@@ -375,7 +377,7 @@ function map() {
 
                     myMap = new ymaps.Map('map', {
                         center: [position.coords.latitude, position.coords.longitude],
-                        zoom: 15
+                        zoom: 13
                     }, {
                         searchControlProvider: 'yandex#search'
                     });
