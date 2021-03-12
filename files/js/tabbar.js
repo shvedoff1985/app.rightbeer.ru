@@ -3,7 +3,6 @@ let tabbar;
 window.onload = function() {
    tabbar = $(document).height();
    $("#tabbar").css("top",tabbar-72);
-
    windowheight = document.documentElement.clientHeight;
    windowwidth = $(document).width();
    $("#overlay").css("height", windowheight-55);
