@@ -21,32 +21,32 @@
 	<page id="page" mobile-app="right-beer">
 		<div id="statusbar" class="shadow-box">
 			<div class="next"></div>
-			<div class="name-layout">RightBeer | <font class="name"></font></div>
+			<div class="name-layout">RightBeer | <font class="name"></font><font class="exit"></font></div>
 		</div>
 		<div id="layout" page="login">
 
 		</div>
 		<div id="tabbar" class="shadow-box">
 			<nav>
-				<div class="login">
+				<div class="login profile">
 					<div onclick="login()" class="button active">
 						<div class="icon"><i class="far fa-user-circle"></i></div>
 						<div class="name">Войти</div>
 					</div>
 				</div>
 				<div class="news">
-					<div onclick="profile()" class="button">
+					<div onclick="news()" class="button">
 						<div class="icon"><i class="far fa-newspaper"></i></div>
 						<div class="name">Новости</div>
 					</div>
 				</div>
-				<div class="stocks">
+				<div onclick="stocks()" class="stocks">
 					<div class="button">
 						<div class="icon"><i class="fas fa-tags"></i></div>
 						<div class="name">Акции</div>
 					</div>
 				</div>
-				<div class="map">
+				<div onclick="map()" class="map">
 					<div class="button">
 						<div class="icon"><i class="far fa-map"></i></div>
 						<div class="name">Карта</div>

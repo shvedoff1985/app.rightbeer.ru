@@ -29,11 +29,22 @@ body {
 	background-size: 100% 100%;
 }
 
+#layout.p-login {
+	background-image: url(../images/logo_bg.jpg);
+	background-position: center center;
+	background-size: 100% 100%;
+}
+
 #statusbar .name-layout {
 	color: white;
 	font-size: 20px;
 	font-weight: 400;
 	margin: 16px 20px 0;
+}
+
+
+#statusbar .exit {
+	float: right;
 }
 
 #tabbar {
