@@ -1,11 +1,12 @@
 let User = false;
-First_exit = false;
-Page = 'login';
+    First_exit = false;
+    Phone = '+7 (910) 255-75-12';
+    Page = 'login';
 
 if (localStorage.account == "login") {
     User=true;
     Page='profile';
-    profile();
+    authorization();
 }else{
     User=false;
     Page='login';
@@ -18,21 +19,6 @@ if(!First_exit) {setTimeout(function(){$("#preload-main").css("display", "none")
 
 $(document).ready ( function(){
     if (!User && Page == 'login') {
-
-          $.ajax({
-            type: 'POST',
-            url: 'https://app.maksf.ru/getcard.php',
-            data: {
-                phone: '79156074651',
-                Authorization: 'd3577f6c-05e4-430b-bfa9-561f4ad4b7ea',
-                accept: 'application/json',
-            },
-            success: function(data) {
-                console.log(JSON.parse(data));
-            }
-        });
-
-
 
 
         $('#preload').css('display', 'block');
@@ -115,7 +101,8 @@ $(document).ready ( function(){
                     localStorage.account = 'login';
                     $("#overlay").css("display", 'none');
                     $("#overlay").html('');
-                    profile();
+                    Phone = $("#phone-mask").val();
+                    authorization();
                 }else{
                     alert('Неверный код');
                 }
@@ -216,7 +203,8 @@ function login() {
                     localStorage.account = 'login';
                     $("#overlay").css("display", 'none');
                     $("#overlay").html('');
-                    profile();
+                    Phone = $("#phone-mask").val();
+                    authorization();
                 }else{
                     alert('Неверный код');
                 }
@@ -239,6 +227,91 @@ function login() {
 }
 
 
+
+
+function authorization() {
+    $('#preload').css('display', 'block');
+
+    Phone = Phone.split('+').join('');
+    Phone = Phone.split(' ').join('');
+    Phone = Phone.split('(').join('');
+    Phone = Phone.split(')').join('');
+    Phone = Phone.split('-').join('');
+
+
+    //Чистый номер телефона - Phone
+
+
+    //Отправляем запрос на получение данных
+
+    $.ajax({
+      type: 'POST',
+      url: 'https://app.maksf.ru/getcard.php',
+      data: {
+          phone: '79102557512',
+          Authorization: 'd3577f6c-05e4-430b-bfa9-561f4ad4b7ea',
+          accept: 'application/json',
+      },
+      success: function(data) {
+          card = JSON.parse(data)
+
+
+          //Проверка, существует ли карта
+          if (card.message == "Карта не найдена") {
+            //Если карта не существует
+
+            //Отправляем на регистраницю
+
+
+          }else{
+            //Если карта сущетсвует
+            //Сохраняем данные
+
+            localStorage.CardNumber = card.number;
+            localStorage.CardBalance = card.balance;
+            localStorage.FormHolder = card.form.holder;
+            localStorage.FormHolder = card.form.holder;
+            localStorage.FormPhone = card.form.phone;
+            localStorage.FormBirthdate = card.form.birthdate;
+
+            //Отправляем в профиль
+            profile();
+          }
+          //Проверка есть ли карта
+          setTimeout(function(){$('#preload').css('display', 'none');}, 650);
+      }
+  });
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function profile() {
     $('#preload').css('display', 'block');
     setTimeout(function(){$('#preload').css('display', 'none');}, 650);
@@ -255,11 +328,16 @@ function profile() {
 
     //Загрузка контента
     $("#layout").html(
-        '<div class="logo">\
-            <img src="files/images/logo-light.png" width="200">\
-        </div>'
+        '<svg id="barcode"></svg><br>\
+        Номер карты: ' +localStorage.CardNumber+ '<br>\
+        Пользователь: ' +localStorage.FormHolder+ '<br>\
+        Номер телефона: ' +localStorage.FormPhone+ '<br>\
+        Дата рождения: ' +localStorage.FormBirthdate+ '<br>\
+        Баланс: ' +localStorage.CardBalance+ '<br>'
     );
-    console.log(localStorage.account);
+
+    JsBarcode("#barcode", localStorage.CardNumber);
+
     //Нижний юлок
     $(".button").removeClass('active');
     if (localStorage.account == "login") {
