@@ -6,7 +6,7 @@ let User = false;
 if (localStorage.account == "login") {
     User=true;
     Page='profile';
-    authorization();
+    profile();
 }else{
     User=false;
     Page='login';
@@ -248,7 +248,7 @@ function authorization() {
       type: 'POST',
       url: 'https://app.maksf.ru/getcard.php',
       data: {
-          phone: '79102557512',
+          phone: Phone,
           Authorization: 'd3577f6c-05e4-430b-bfa9-561f4ad4b7ea',
           accept: 'application/json',
       },
