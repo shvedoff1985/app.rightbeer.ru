@@ -18,6 +18,25 @@ if(!First_exit) {setTimeout(function(){$("#preload-main").css("display", "none")
 
 $(document).ready ( function(){
     if (!User && Page == 'login') {
+
+          $.ajax({
+            type: 'POST',
+            url: 'https://app.maksf.ru/getcard.php',
+            data: {
+                phone: '79156074651',
+                Authorization: 'd3577f6c-05e4-430b-bfa9-561f4ad4b7ea',
+                accept: 'application/json',
+            },
+            success: function(data) {
+                console.log(JSON.parse(data));
+            }
+        });
+
+
+
+
+        $('#preload').css('display', 'block');
+        setTimeout(function(){$('#preload').css('display', 'none');}, 650);
         //Атрибут Page для layout
         $('#layout').removeAttr('page');
         $('#layout').attr('page', 'login');
@@ -110,6 +129,9 @@ $(document).ready ( function(){
 });
 
 function login() {
+    $('#preload').css('display', 'block');
+    setTimeout(function(){$('#preload').css('display', 'none');}, 650);
+
     Page = 'login';
 
     if (!User && Page == 'login') {
@@ -218,6 +240,9 @@ function login() {
 
 
 function profile() {
+    $('#preload').css('display', 'block');
+    setTimeout(function(){$('#preload').css('display', 'none');}, 650);
+
     Page = 'profile';
     //Атрибут Page для layout
     $('#layout').removeAttr('page');
@@ -257,6 +282,8 @@ function profile() {
 }
 
 function news() {
+    $('#preload').css('display', 'block');
+
     Page = 'news';
     //Атрибут Page для layout
     $('#layout').removeAttr('page');
@@ -267,11 +294,40 @@ function news() {
     //Название страницы
     $(".name-layout .name").html('Новости');
     //Загрузка контента
-    $("#layout").html(
-        '<div class="card">\
-            Card\
-        </div>'
-    );
+
+    $("#layout").html('<div class="lineP"></div>');
+
+
+
+    var News = new XMLHttpRequest();
+    News.open('GET', 'https://app.maksf.ru', false);
+    News.send();
+    console.log(News.responseText);
+    if (News.status != 200) {
+      $('#preload').css('display', 'block');
+    } else {
+        setTimeout(function(){$('#preload').css('display', 'none');}, 650);
+        News_arr = JSON.parse(News.responseText);
+        News_Numm = Object.keys(News_arr).length;
+
+        for (var i = 1; i < News_Numm+1 ; i++) {
+
+
+          $("#layout").append(
+              '<div class="card">\
+                  <img src="'+News_arr[i]['image']+'">\
+                  <div class="title">'+News_arr[i].name+'</div>\
+                  <div class="text">'+News_arr[i].text+'</div>\
+              </div>\
+              '
+          );
+        }
+    }
+
+
+
+
+
 
 
     //Нижний юлок
@@ -293,11 +349,18 @@ function news() {
         );
     }
     $("#tabbar .news .button").addClass('active');
+
+
+
 }
 
 
 
 function stocks() {
+    $('#preload').css('display', 'block');
+    setTimeout(function(){$('#preload').css('display', 'none');}, 650);
+
+
     Page = 'stocks';
     //Атрибут Page для layout
     $('#layout').removeAttr('page');
@@ -339,6 +402,9 @@ function stocks() {
 
 
 function map() {
+    $('#preload').css('display', 'block');
+
+
     Page = 'map';
     //Атрибут Page для layout
     $('#layout').removeAttr('page');
@@ -1226,6 +1292,7 @@ function map() {
 
                 myMap.geoObjects.add(placemark1).add(placemark2).add(placemark3).add(placemark4).add(placemark5).add(placemark6).add(placemark7).add(placemark8).add(placemark9).add(placemark10).add(placemark11).add(placemark12).add(placemark13).add(placemark14).add(placemark15).add(placemark16).add(placemark17).add(placemark18).add(placemark19).add(placemark20).add(placemark21).add(placemark22).add(placemark23).add(placemark24).add(placemark25).add(placemark26).add(placemark27).add(placemark28).add(placemark29).add(placemark30).add(placemark31).add(placemark32).add(placemark33).add(placemark34).add(placemark35).add(placemark36).add(placemark37).add(placemark38).add(placemark39).add(placemark40).add(placemark41).add(placemark42).add(placemark43).add(placemark44).add(placemark45).add(placemark46).add(placemark47).add(placemark48).add(placemark49).add(placemark50).add(placemark51).add(placemark52).add(placemark53).add(placemark54).add(placemark55).add(placemark56).add(placemark57).add(placemark58).add(placemark59).add(placemark60).add(placemark61).add(placemark62).add(placemark63).add(placemark64).add(placemark65).add(placemark66).add(placemark67).add(placemark68).add(placemark69).add(placemark70).add(placemark71).add(placemark72).add(placemark73).add(placemark74).add(placemark75).add(placemark76).add(placemark77);
 
+                setTimeout(function(){$('#preload').css('display', 'none');}, 650);
             }
         };
 

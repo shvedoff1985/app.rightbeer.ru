@@ -10,7 +10,12 @@ window.onload = function() {
 };
 
 setInterval(function(){
-    $("#layout[page='login']").css("height",$(document).height()-55);
+    if (Page == 'login') {
+        $("#layout").css("height",$(document).height()-55);
+    }else{
+        $("#layout").css("height",'unset');
+    }
+
     if(tabbar < $(document).height()) {
         //$("#tabbar").css("top",$(document).height()-72);
     }
