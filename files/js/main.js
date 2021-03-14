@@ -378,7 +378,7 @@ function news() {
 
 
     var News = new XMLHttpRequest();
-    News.open('GET', 'https://app.maksf.ru', false);
+    News.open('GET', 'https://app.maksf.ru/news.php', false);
     News.send();
     console.log(News.responseText);
     if (News.status != 200) {
@@ -449,11 +449,36 @@ function stocks() {
     //Название страницы
     $(".name-layout .name").html('Акции');
     //Загрузка контента
-    $("#layout").html(
-        '<div class="logo">\
-            <img src="files/images/logo-light.png" width="200">\
-        </div>'
-    );
+    $("#layout").html('<div class="lineP"></div>');
+
+
+
+    var News = new XMLHttpRequest();
+    News.open('GET', 'https://app.maksf.ru/stocks.php', false);
+    News.send();
+    console.log(News.responseText);
+    if (News.status != 200) {
+      $('#preload').css('display', 'block');
+    } else {
+        setTimeout(function(){$('#preload').css('display', 'none');}, 650);
+        News_arr = JSON.parse(News.responseText);
+        News_Numm = Object.keys(News_arr).length;
+
+        for (var i = 1; i < News_Numm+1 ; i++) {
+
+
+          $("#layout").append(
+              '<div class="card">\
+                  <img src="'+News_arr[i]['image']+'">\
+                  <div class="title">'+News_arr[i].name+'</div>\
+                  <div class="text">'+News_arr[i].text+'</div>\
+              </div>\
+              '
+          );
+        }
+    }
+
+
 
 
     //Нижний юлок
