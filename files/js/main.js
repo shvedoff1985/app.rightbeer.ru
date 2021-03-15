@@ -533,6 +533,8 @@ function map() {
     $('#preload').css('display', 'block');
 
 
+
+
     Page = 'map';
     //Атрибут Page для layout
     $('#layout').removeAttr('page');
@@ -542,12 +544,12 @@ function map() {
     $(".name-layout .name").html('Карты');
     //Загрузка контента
     $("#layout").html(
-        '<div id="map" style="width: 100%; height: 100%"></div>'
+        '<div id="map" style="width: 100%;"></div>'
     );
     $("metajs").html(
         '<script src="https://api-maps.yandex.ru/2.1/?apikey=4589713e-a8e5-4019-bd5a-e4de5fb76b1d&lang=ru_RU" type="text/javascript"></script>'
     );
-
+    $("#layout #map").css("height", $(document).height()-72-55);
 
 
     //Функции map.js
