@@ -326,12 +326,11 @@ function profile() {
     $("metajs").html('');
 
     //Название страницы
-    name = localStorage.FormHolder;
-    name = name.split(' ')[0];
 
 
 
-    $(".name-layout .name").html(name);
+
+    $(".name-layout .name").html(localStorage.FormHolder);
 
     //Загрузка контента
     $("#layout").html(
@@ -566,7 +565,7 @@ function map() {
         };
 
         var onSuccess = function(position) {
-
+            $('#preload').css('display', 'none');
             ymaps.ready(init);
 
             function init() {
@@ -1423,14 +1422,13 @@ function map() {
 
                 myMap.geoObjects.add(placemark1).add(placemark2).add(placemark3).add(placemark4).add(placemark5).add(placemark6).add(placemark7).add(placemark8).add(placemark9).add(placemark10).add(placemark11).add(placemark12).add(placemark13).add(placemark14).add(placemark15).add(placemark16).add(placemark17).add(placemark18).add(placemark19).add(placemark20).add(placemark21).add(placemark22).add(placemark23).add(placemark24).add(placemark25).add(placemark26).add(placemark27).add(placemark28).add(placemark29).add(placemark30).add(placemark31).add(placemark32).add(placemark33).add(placemark34).add(placemark35).add(placemark36).add(placemark37).add(placemark38).add(placemark39).add(placemark40).add(placemark41).add(placemark42).add(placemark43).add(placemark44).add(placemark45).add(placemark46).add(placemark47).add(placemark48).add(placemark49).add(placemark50).add(placemark51).add(placemark52).add(placemark53).add(placemark54).add(placemark55).add(placemark56).add(placemark57).add(placemark58).add(placemark59).add(placemark60).add(placemark61).add(placemark62).add(placemark63).add(placemark64).add(placemark65).add(placemark66).add(placemark67).add(placemark68).add(placemark69).add(placemark70).add(placemark71).add(placemark72).add(placemark73).add(placemark74).add(placemark75).add(placemark76).add(placemark77);
 
-                setTimeout(function(){$('#preload').css('display', 'none');}, 350);
+
             }
         };
 
 
 
         function onError(error) {
-            $('#preload').css('display', 'block');
             alert('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
         }
 
