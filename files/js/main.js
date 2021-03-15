@@ -1,6 +1,6 @@
 let User = false;
     First_exit = false;
-    Phone = '+7 (910) 255-75-12';
+    Phone = '';
     Page = 'login';
 
 if (localStorage.account == "login") {
@@ -81,6 +81,7 @@ $(document).ready ( function(){
                 var xhr = new XMLHttpRequest();
                 xhr.open('GET', 'https://smsc.ru/sys/send.php?login=shvedoff1985&psw=b12132ff02dd8e140df8fa5c59c23df1&phones='+$("#phone-mask").val()+'&mes=code&call=1&fmt=3', false);
                 xhr.send();
+
                 if (xhr.status != 200) {
                 } else {
                     pin = JSON.parse(xhr.responseText);
@@ -98,10 +99,11 @@ $(document).ready ( function(){
                 pin = pin.code;
                 pin = pin.substr(2, 6);
                 if (pincode == pin) {
-                    localStorage.account = 'login';
+
                     $("#overlay").css("display", 'none');
                     $("#overlay").html('');
                     Phone = $("#phone-mask").val();
+                    alert(Phone);
                     authorization();
                 }else{
                     alert('Неверный код');
@@ -200,10 +202,10 @@ function login() {
                 pin = pin.substr(2, 6);
                 console.log(pin.code+'-'+pin);
                 if (pincode == pin) {
-                    localStorage.account = 'login';
                     $("#overlay").css("display", 'none');
                     $("#overlay").html('');
                     Phone = $("#phone-mask").val();
+                    alert(Phone);
                     authorization();
                 }else{
                     alert('Неверный код');
@@ -231,7 +233,7 @@ function login() {
 
 function authorization() {
     $('#preload').css('display', 'block');
-
+    alert(Phone);
     Phone = Phone.split('+').join('');
     Phone = Phone.split(' ').join('');
     Phone = Phone.split('(').join('');
@@ -266,7 +268,7 @@ function authorization() {
           }else{
             //Если карта сущетсвует
             //Сохраняем данные
-
+            localStorage.account = 'login';
             localStorage.CardNumber = card.number;
             localStorage.CardBalance = card.balance;
             localStorage.FormHolder = card.form.holder;
@@ -327,11 +329,9 @@ function profile() {
     name = localStorage.FormHolder;
     name = name.split(' ')[0];
 
-    surname = localStorage.FormHolder;
-    surname = surname.split(' ')[1];
-    surname = surname[0];
 
-    $(".name-layout .name").html(name+' '+surname+'.');
+
+    $(".name-layout .name").html(name);
 
     //Загрузка контента
     $("#layout").html(
