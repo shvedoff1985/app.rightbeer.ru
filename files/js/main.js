@@ -103,7 +103,6 @@ $(document).ready ( function(){
                     $("#overlay").css("display", 'none');
                     $("#overlay").html('');
                     Phone = $("#phone-mask").val();
-                    alert(Phone);
                     authorization();
                 }else{
                     alert('Неверный код');
@@ -205,7 +204,6 @@ function login() {
                     $("#overlay").css("display", 'none');
                     $("#overlay").html('');
                     Phone = $("#phone-mask").val();
-                    alert(Phone);
                     authorization();
                 }else{
                     alert('Неверный код');
