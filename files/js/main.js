@@ -557,10 +557,21 @@ function map() {
         WonderPush.subscribeToNotifications();
 
         options = {
-            maximumAge: 30000,
-            timeout: 10000,
+            maximumAge: 3600000,
+            timeout: 4000,
             enableHighAccuracy: true
         };
+
+        //Узнать включена ли локация?
+        cordova.plugins.diagnostic.isLocationEnabled(successCallback, errorCallback);
+        function successCallback(res){
+            alert("Геолокация " + (res ? "включена" : "выключена"));
+            !res ? cordova.plugins.diagnostic.switchToLocationSettings() : '';
+        }
+        function errorCallback(err){
+            alert("Ошибка: "+JSON.stringify(err));
+        }
+        //Конец включена ли локация?
 
         var onSuccess = function(position) {
             $('#preload').css('display', 'none');
