@@ -304,7 +304,25 @@ function authorization() {
 
 
 
+function RelBalance() {
+    if (localStorage.account == "login") {
 
+        $.ajax({
+          type: 'POST',
+          url: 'https://app.maksf.ru/getcard.php',
+          data: {
+              phone: localStorage.FormPhone,
+              Authorization: 'd3577f6c-05e4-430b-bfa9-561f4ad4b7ea',
+              accept: 'application/json',
+          },
+          success: function(data) {
+                card = JSON.parse(data)
+                localStorage.CardBalance = card.balance;
+            }
+        });
+    }
+
+}
 
 
 
@@ -317,6 +335,13 @@ function profile() {
     setTimeout(function(){$('#preload').css('display', 'none');}, 650);
 
     Page = 'profile';
+    RelBalance();
+
+    setInterval(function(){
+        RelBalance();
+        $("#layout .reload").html('<b>'+localStorage.CardBalance+'</b>');
+    }, 5000);
+
     //Атрибут Page для layout
     $('#layout').removeAttr('page');
     $('#layout').attr('page', 'profile');
@@ -342,10 +367,10 @@ function profile() {
         </div>\
         <div class="card balance">\
             <div class="balancet">\
-                баланс: <b>'+localStorage.CardBalance+'</b>\
+                баланс: \
             </div>\
             <div class="reload">\
-                <i class="fas fa-sync-alt"></i>\
+                <b>'+localStorage.CardBalance+'</b>\
             </div>\
         </div>\
         ');
