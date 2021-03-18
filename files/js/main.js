@@ -22,7 +22,6 @@ $(document).ready ( function(){
 
 
         $('#preload').css('display', 'block');
-        setTimeout(function(){$('#preload').css('display', 'none');}, 650);
         //Атрибут Page для layout
         $('#layout').removeAttr('page');
         $('#layout').attr('page', 'login');
@@ -118,7 +117,6 @@ $(document).ready ( function(){
 
 function login() {
     $('#preload').css('display', 'block');
-    setTimeout(function(){$('#preload').css('display', 'none');}, 650);
 
     Page = 'login';
 
@@ -199,7 +197,7 @@ function login() {
                 pincode = pincode.split('-').join('');
                 pin = pin.code;
                 pin = pin.substr(2, 6);
-                console.log(pin.code+'-'+pin);
+                //console.log(pin.code+'-'+pin);
                 if (pincode == pin) {
                     $("#overlay").css("display", 'none');
                     $("#overlay").html('');
@@ -267,6 +265,7 @@ function authorization() {
             //Если карта сущетсвует
             //Сохраняем данные
             localStorage.account = 'login';
+            localStorage.Carduuid = card.uuid;
             localStorage.CardNumber = card.number;
             localStorage.CardBalance = card.balance;
             localStorage.FormHolder = card.form.holder;
@@ -274,11 +273,12 @@ function authorization() {
             localStorage.FormPhone = card.form.phone;
             localStorage.FormBirthdate = card.form.birthdate;
 
+
             //Отправляем в профиль
             profile();
           }
           //Проверка есть ли карта
-          setTimeout(function(){$('#preload').css('display', 'none');}, 650);
+          close_preload();
       }
   });
 
@@ -321,7 +321,8 @@ function RelBalance() {
                 if(localStorage.CardBalance !== card.balance) {
                     localStorage.CardBalance = card.balance;
                     $("#layout .reload").html('<b>'+localStorage.CardBalance+'</b>');
-                    confetti.start(1200, 50, 150);
+                    //confetti.start(1200, 50, 150);
+
                 }
 
             }
@@ -338,14 +339,15 @@ function RelBalance() {
 
 function profile() {
     $('#preload').css('display', 'block');
-    setTimeout(function(){$('#preload').css('display', 'none');}, 650);
+
+    close_preload();
 
     Page = 'profile';
     RelBalance();
 
     setInterval(function(){
         RelBalance();
-    }, 5000);
+    }, 20000);
 
 
 
@@ -356,9 +358,6 @@ function profile() {
     $("metajs").html('');
 
     //Название страницы
-
-
-
 
     $(".name-layout .name").html('Профиль');
 
@@ -380,7 +379,69 @@ function profile() {
                 <b>'+localStorage.CardBalance+'</b>\
             </div>\
         </div>\
+        <div class="card check">\
+            <div class="title">\
+                Последние операции\
+            </div>\
+            <div class="check_card">\
+            </div>\
+        </div>\
         ');
+
+
+
+        $.ajax({
+          type: 'POST',
+          url: 'https://app.maksf.ru/getcheck.php',
+          data: {
+              Uuid: 'ba895b40-bd66-4e2f-bcdb-ae2d7309ff89'/*localStorage.Carduuid*/,
+          },
+          success: function(data) {
+              alert(Math.round(new Date().getTime()/1000.0));
+              Check_arr = JSON.parse(data);
+              Check_Numm = Object.keys(Check_arr).length;
+              console.log(Check_arr);
+              for (var i = 0; i < Check_Numm; i++) {
+                $(".check_card").append(
+                    '<div class="cards">\
+                        <div class="text">Потрачено: <b>'+Check_arr[i].total+'</b> | Начислен бонусов: <b>'+Check_arr[i].bonus+'</b> | Номер платежа: <b>'+Check_arr[i].number+'</b> | Дата: <b>'+Check_arr[i].period+'</b></div>\
+                    </div>\
+                    '
+                );
+              }
+          },
+          error: function(xhr, textStatus, error){
+
+          }
+        });
+
+
+        /*
+        var News = new XMLHttpRequest();
+        News.open('GET', 'http://app.maksf.ru/getcheck.php', false);
+        News.send();
+        //console.log(News.responseText);
+        if (News.status != 200) {
+          $('#preload').css('display', 'block');
+        } else {
+            close_preload();
+            News_arr = JSON.parse(News.responseText);
+            News_Numm = Object.keys(News_arr).length;
+
+            for (var i = 1; i < News_Numm+1 ; i++) {
+
+
+              $("#layout").append(
+                  '<div class="card">\
+                      <img src="'+News_arr[i]['image']+'">\
+                      <div class="title">'+News_arr[i].name+'</div>\
+                      <div class="text">'+News_arr[i].text+'</div>\
+                  </div>\
+                  '
+              );
+            }
+        }
+        */
 
         //'<br>\
         //Номер карты: ' +localStorage.CardNumber+ '<br>\
@@ -410,11 +471,16 @@ function profile() {
             </div>'
         );
     }
+
+    //Проверка кнопок
+    tabbar_onclick();
+
     $("#tabbar .login .button").addClass('active');
 }
 
 function news() {
     $('#preload').css('display', 'block');
+    close_preload();
 
     Page = 'news';
     //Атрибут Page для layout
@@ -434,11 +500,11 @@ function news() {
     var News = new XMLHttpRequest();
     News.open('GET', 'https://app.maksf.ru/news.php', false);
     News.send();
-    console.log(News.responseText);
+    //console.log(News.responseText);
     if (News.status != 200) {
       $('#preload').css('display', 'block');
     } else {
-        setTimeout(function(){$('#preload').css('display', 'none');}, 650);
+        close_preload();
         News_arr = JSON.parse(News.responseText);
         News_Numm = Object.keys(News_arr).length;
 
@@ -480,6 +546,10 @@ function news() {
             </div>'
         );
     }
+
+    //Проверка кнопок
+    tabbar_onclick();
+
     $("#tabbar .news .button").addClass('active');
 
 
@@ -490,7 +560,7 @@ function news() {
 
 function stocks() {
     $('#preload').css('display', 'block');
-    setTimeout(function(){$('#preload').css('display', 'none');}, 650);
+    close_preload();
 
 
     Page = 'stocks';
@@ -510,11 +580,11 @@ function stocks() {
     var News = new XMLHttpRequest();
     News.open('GET', 'https://app.maksf.ru/stocks.php', false);
     News.send();
-    console.log(News.responseText);
+    //console.log(News.responseText);
     if (News.status != 200) {
       $('#preload').css('display', 'block');
     } else {
-        setTimeout(function(){$('#preload').css('display', 'none');}, 650);
+        close_preload();
         News_arr = JSON.parse(News.responseText);
         News_Numm = Object.keys(News_arr).length;
 
@@ -554,6 +624,10 @@ function stocks() {
             </div>'
         );
     }
+
+    //Проверка кнопок
+    tabbar_onclick();
+
     $("#tabbar .stocks .button").addClass('active');
 }
 
@@ -635,7 +709,7 @@ function map() {
                             myMap.geoObjects.add(result.geoObjects)
                         },
                         function(err) {
-                            console.log('Ошибка: ' + err)
+                            //console.log('Ошибка: ' + err)
                         }
                     );
 
@@ -647,7 +721,7 @@ function map() {
                 if (PointToMaps.status != 200) {
                   $('#preload').css('display', 'block');
                 } else {
-                    setTimeout(function(){$('#preload').css('display', 'none');}, 650);
+                    close_preload();
                     Point_arr = JSON.parse(PointToMaps.responseText);
                     Point_Numm = Object.keys(Point_arr).length;
 
@@ -711,16 +785,37 @@ function map() {
             </div>'
         );
     }
+
+    //Проверка кнопок
+    tabbar_onclick();
+
     $("#tabbar .map .button").addClass('active');
 }
 
 
 
 
+function close_preload() {
+    $('#preload').removeClass('animation');
+    $('#preload').css('display', 'block');
+
+    setTimeout(function(){$('#preload').addClass('animation');},250);
+    setTimeout(function(){$('#preload').removeClass('animation');$('#preload').css('display', 'none');},451);
+}
 
 
 
 
+function tabbar_onclick() {
+  if (Page == "profile") {$("#tabbar .login.profile").html('<div class="button"><div class="icon"><i class="fas fa-barcode"></i></div><div class="name">Профиль</div><div>');
+  }else{$("#tabbar .login.profile").html('<div onclick="profile()" class="button"><div class="icon"><i class="fas fa-barcode"></i></div><div class="name">Профиль</div><div>');}
+  if (Page == "news") {$("#tabbar .news").html('<div class="button"><div class="icon"><i class="far fa-newspaper"></i></div><div class="name">Новости</div></div>');
+  }else{$("#tabbar .news").html('<div onclick="news()" class="button"><div class="icon"><i class="far fa-newspaper"></i></div><div class="name">Новости</div></div>');}
+  if (Page == "stocks") {$("#tabbar .stocks").html('<div class="button"><div class="icon"><i class="fas fa-tags"></i></div><div class="name">Акции</div></div>');
+  }else{$("#tabbar .stocks").html('<div onclick="stocks()" class="button"><div class="icon"><i class="fas fa-tags"></i></div><div class="name">Акции</div></div>');}
+  if (Page == "map") {$("#tabbar .map").html('<div class="button"><div class="icon"><i class="far fa-map"></i></div><div class="name">Карта</div></div>');
+  }else{$("#tabbar .map").html('<div onclick="map()" class="button"><div class="icon"><i class="far fa-map"></i></div><div class="name">Карта</div></div>');}
+}
 
 
 
