@@ -565,11 +565,11 @@ function map() {
         //Узнать включена ли локация?
         cordova.plugins.diagnostic.isLocationEnabled(successCallback, errorCallback);
         function successCallback(res){
-            alert("Геолокация " + (res ? "включена" : "выключена"));
+            //alert("Геолокация " + (res ? "включена" : "выключена"));
             !res ? cordova.plugins.diagnostic.switchToLocationSettings() : '';
         }
         function errorCallback(err){
-            alert("Ошибка: "+JSON.stringify(err));
+            //alert("Ошибка: "+JSON.stringify(err));
         }
         //Конец включена ли локация?
 
@@ -587,9 +587,29 @@ function map() {
                         searchControlProvider: 'yandex#search'
                     });
 
+                geolocation.get({
+                    mapStateAutoApply: true
+                })
+                    .then(
+                        function(result) {
+                            // Получение местоположения пользователя.
+                            var userAddress = result.geoObjects.get(0).properties.get('text');
+                            var userCoodinates = result.geoObjects.get(0).geometry.getCoordinates();
+                            // Пропишем полученный адрес в балуне.
+                            result.geoObjects.get(0).properties.set({
+                                balloonContentBody: 'Адрес: ' + userAddress +
+                                    '<br/>Координаты:' + userCoodinates
+                            });
+                            myMap.geoObjects.add(result.geoObjects)
+                        },
+                        function(err) {
+                            console.log('Ошибка: ' + err)
+                        }
+                    );
+
                 var PointToMaps = new XMLHttpRequest();
 
-                PointToMaps.open('GET', 'http://app.rightbeer.ru', false);
+                PointToMaps.open('GET', 'https://app.maksf.ru/getmap.php', false);
                 PointToMaps.send();
 
                 if (PointToMaps.status != 200) {
@@ -599,19 +619,17 @@ function map() {
                     Point_arr = JSON.parse(PointToMaps.responseText);
                     Point_Numm = Object.keys(Point_arr).length;
 
-                    for (var i = 0; i < Point_Numm+1 ; i++) {
+                    for (var i = 0; i < Point_Numm ; i++) {
                         var pos_before = Point_arr[i].pos.split(' ')[0];
                         var pos_after = Point_arr[i].pos.split(' ')[1];
 
-                        alert(pos_before + ' ' + pos_after + ' ' + Point_arr[i].address);
-
                         placemarki = new ymaps.Placemark([pos_after, pos_before], {
                             //balloonContentBody: '' +
-                            balloonContentBody: Point_arr[i].address
-                                //'<strong>Right</strong><br/>' +
-                                //'<strong>Адрес: </strong>' + Point_arr[i].address + '<br/>' +
-                                //'<strong>Время работы: </strong>' + Point_arr[i].openHour + '<br/>' +
-                                //'<strong>Телефон: </strong><a href=tel:' + Point_arr[i].phone + '>' + Point_arr[i].phone + '</a>'
+                            balloonContentBody:
+                                '<strong>Right</strong><br/>' +
+                                '<strong>Адрес: </strong>' + Point_arr[i].address + '<br/>' +
+                                '<strong>Время работы: </strong>' + Point_arr[i].openHour + '<br/>' +
+                                '<strong>Телефон: </strong><a href="tel:' + Point_arr[i].phone + '" >' + Point_arr[i].phone + '</a>'
                         }, {
                             // Опции.
                             // Необходимо указать данный тип макета.
