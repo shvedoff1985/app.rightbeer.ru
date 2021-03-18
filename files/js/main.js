@@ -231,7 +231,7 @@ function login() {
 
 function authorization() {
     $('#preload').css('display', 'block');
-    alert(Phone);
+    //alert(Phone);
     Phone = Phone.split('+').join('');
     Phone = Phone.split(' ').join('');
     Phone = Phone.split('(').join('');
@@ -680,7 +680,7 @@ function map() {
 
 
         function onError(error) {
-            alert('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
+            //alert('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
         }
         navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
     }
