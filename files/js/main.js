@@ -317,7 +317,13 @@ function RelBalance() {
           },
           success: function(data) {
                 card = JSON.parse(data)
-                localStorage.CardBalance = card.balance;
+
+                if(localStorage.CardBalance !== card.balance) {
+                    localStorage.CardBalance = card.balance;
+                    $("#layout .reload").html('<b>'+localStorage.CardBalance+'</b>');
+                    confetti.start(1200, 50, 150);
+                }
+
             }
         });
     }
@@ -339,8 +345,9 @@ function profile() {
 
     setInterval(function(){
         RelBalance();
-        $("#layout .reload").html('<b>'+localStorage.CardBalance+'</b>');
     }, 5000);
+
+
 
     //Атрибут Page для layout
     $('#layout').removeAttr('page');
@@ -353,13 +360,13 @@ function profile() {
 
 
 
-    $(".name-layout .name").html(localStorage.FormHolder);
+    $(".name-layout .name").html('Профиль');
 
     //Загрузка контента
     $("#layout").html(
         '<div class="card">\
             <div class="title">\
-                Виртуальная карта\
+                '+localStorage.FormHolder.toUpperCase()+'\
             </div>\
             <div class="code">\
                 <svg id="barcode"></svg>\
@@ -367,7 +374,7 @@ function profile() {
         </div>\
         <div class="card balance">\
             <div class="balancet">\
-                баланс: \
+                Баланс: \
             </div>\
             <div class="reload">\
                 <b>'+localStorage.CardBalance+'</b>\
