@@ -565,11 +565,11 @@ function map() {
         //Узнать включена ли локация?
         cordova.plugins.diagnostic.isLocationEnabled(successCallback, errorCallback);
         function successCallback(res){
-            //alert("Геолокация " + (res ? "включена" : "выключена"));
+            alert("Геолокация " + (res ? "включена" : "выключена"));
             !res ? cordova.plugins.diagnostic.switchToLocationSettings() : '';
         }
         function errorCallback(err){
-            //alert("Ошибка: "+JSON.stringify(err));
+            alert("Ошибка: "+JSON.stringify(err));
         }
         //Конец включена ли локация?
 
@@ -591,7 +591,7 @@ function map() {
 
                 PointToMaps.open('GET', 'http://app.rightbeer.ru', false);
                 PointToMaps.send();
-                console.log(PointToMaps.responseText);
+
                 if (PointToMaps.status != 200) {
                   $('#preload').css('display', 'block');
                 } else {
@@ -603,11 +603,29 @@ function map() {
                         var pos_before = Point_arr[i].pos.split(' ')[0];
                         var pos_after = Point_arr[i].pos.split(' ')[1];
 
+                        alert(pos_before + ' ' + pos_after + ' ' + Point_arr[i].address);
+
                         placemarki = new ymaps.Placemark([pos_after, pos_before], {
-                            hintContent: Point_arr[i].address,
-                            iconContent: "",
+                            //balloonContentBody: '' +
+                            balloonContentBody: Point_arr[i].address
+                                //'<strong>Right</strong><br/>' +
+                                //'<strong>Адрес: </strong>' + Point_arr[i].address + '<br/>' +
+                                //'<strong>Время работы: </strong>' + Point_arr[i].openHour + '<br/>' +
+                                //'<strong>Телефон: </strong><a href=tel:' + Point_arr[i].phone + '>' + Point_arr[i].phone + '</a>'
                         }, {
-                            preset: "islands#greenShoppingIcon"
+                            // Опции.
+                            // Необходимо указать данный тип макета.
+                            iconLayout: 'default#imageWithContent',
+                            // Своё изображение иконки метки.
+                            iconImageHref: 'files/images/PointMap.png',
+                            // Размеры метки.
+                            iconImageSize: [48, 48],
+                            // Смещение левого верхнего угла иконки относительно
+                            // её "ножки" (точки привязки).
+                            iconImageOffset: [-24, -24],
+                            // Смещение слоя с содержимым относительно слоя с картинкой.
+                            iconContentOffset: [15, 15],
+
                         });
                         myMap.geoObjects.add(placemarki);
                     }
@@ -619,7 +637,7 @@ function map() {
 
 
         function onError(error) {
-            //alert('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
+            alert('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
         }
         navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
     }
