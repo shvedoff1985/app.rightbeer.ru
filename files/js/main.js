@@ -565,11 +565,11 @@ function map() {
         //Узнать включена ли локация?
         cordova.plugins.diagnostic.isLocationEnabled(successCallback, errorCallback);
         function successCallback(res){
-            alert("Геолокация " + (res ? "включена" : "выключена"));
+            //alert("Геолокация " + (res ? "включена" : "выключена"));
             !res ? cordova.plugins.diagnostic.switchToLocationSettings() : '';
         }
         function errorCallback(err){
-            alert("Ошибка: "+JSON.stringify(err));
+            //alert("Ошибка: "+JSON.stringify(err));
         }
         //Конец включена ли локация?
 
@@ -603,13 +603,13 @@ function map() {
                         var pos_before = Point_arr[i].pos.split(' ')[0];
                         var pos_after = Point_arr[i].pos.split(' ')[1];
 
-                        placemark = new ymaps.Placemark([pos_before, pos_after], {
+                        placemarki = new ymaps.Placemark([pos_after, pos_before], {
                             hintContent: Point_arr[i].address,
                             iconContent: "",
                         }, {
                             preset: "islands#greenShoppingIcon"
                         });
-                        myMap.geoObjects.add(placemark);
+                        myMap.geoObjects.add(placemarki);
                     }
                 }
 
@@ -619,7 +619,7 @@ function map() {
 
 
         function onError(error) {
-            alert('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
+            //alert('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
         }
         navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
     }
