@@ -487,7 +487,6 @@ function profile() {
 
 function news() {
     $('#preload').css('display', 'block');
-    close_preload();
 
     Page = 'news';
     //Атрибут Page для layout
@@ -567,8 +566,6 @@ function news() {
 
 function stocks() {
     $('#preload').css('display', 'block');
-    close_preload();
-
 
     Page = 'stocks';
     //Атрибут Page для layout
@@ -641,9 +638,6 @@ function stocks() {
 
 function map() {
     $('#preload').css('display', 'block');
-
-
-
 
     Page = 'map';
     //Атрибут Page для layout
