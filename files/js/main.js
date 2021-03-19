@@ -638,7 +638,6 @@ function stocks() {
 
 function map() {
     $('#preload').css('display', 'block');
-    close_preload();
 
     Page = 'map';
     //Атрибут Page для layout
@@ -656,10 +655,9 @@ function map() {
     );
     $("#layout #map").css("height", $(document).height()-72-55);
 
-
     //Функции map.js
     document.addEventListener("deviceready", onDeviceReady, false);
-
+    //onDeviceReady();
     function onDeviceReady() {
 
         WonderPush.subscribeToNotifications();
@@ -669,6 +667,7 @@ function map() {
             timeout: 4000,
             enableHighAccuracy: true
         };
+
 
         //Узнать включена ли локация?
         cordova.plugins.diagnostic.isLocationEnabled(successCallback, errorCallback);
@@ -682,9 +681,8 @@ function map() {
         //Конец включена ли локация?
 
         var onSuccess = function(position) {
-            //close_preload();
-            ymaps.ready(init);
 
+            ymaps.ready(init);
             function init() {
                 var geolocation = ymaps.geolocation,
 
@@ -721,12 +719,11 @@ function map() {
                 PointToMaps.send();
 
                 if (PointToMaps.status != 200) {
-                  //$('#preload').css('display', 'block');
+                  $('#preload').css('display', 'block');
                 } else {
-                    //close_preload();
+                    close_preload();
                     Point_arr = JSON.parse(PointToMaps.responseText);
                     Point_Numm = Object.keys(Point_arr).length;
-
                     for (var i = 0; i < Point_Numm ; i++) {
                         var pos_before = Point_arr[i].pos.split(' ')[0];
                         var pos_after = Point_arr[i].pos.split(' ')[1];
@@ -758,6 +755,7 @@ function map() {
                 }
 
             }
+            close_preload();
         };
 
 
