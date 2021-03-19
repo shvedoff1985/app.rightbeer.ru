@@ -321,7 +321,7 @@ function RelBalance() {
                 if(localStorage.CardBalance !== card.balance) {
                     localStorage.CardBalance = card.balance;
                     $("#layout .reload").html('<b>'+localStorage.CardBalance+'</b>');
-                    //confetti.start(1200, 50, 150);
+                    confetti.start(1200, 50, 150);
 
                 }
 
