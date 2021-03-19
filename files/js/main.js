@@ -638,6 +638,7 @@ function stocks() {
 
 function map() {
     $('#preload').css('display', 'block');
+    close_preload();
 
     Page = 'map';
     //Атрибут Page для layout
@@ -681,7 +682,7 @@ function map() {
         //Конец включена ли локация?
 
         var onSuccess = function(position) {
-            close_preload();
+            //close_preload();
             ymaps.ready(init);
 
             function init() {
@@ -720,9 +721,9 @@ function map() {
                 PointToMaps.send();
 
                 if (PointToMaps.status != 200) {
-                  $('#preload').css('display', 'block');
+                  //$('#preload').css('display', 'block');
                 } else {
-                    close_preload();
+                    //close_preload();
                     Point_arr = JSON.parse(PointToMaps.responseText);
                     Point_Numm = Object.keys(Point_arr).length;
 
