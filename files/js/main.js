@@ -13,6 +13,7 @@ if (localStorage.account == "login") {
     login();
 }
 
+
 //Главный прелоудер
 if(!First_exit) {setTimeout(function(){$("#preload-main").css("display", "none");}, 1350);}else{}
 
@@ -22,6 +23,7 @@ $(document).ready ( function(){
 
 
         $('#preload').css('display', 'block');
+        close_preload();
         //Атрибут Page для layout
         $('#layout').removeAttr('page');
         $('#layout').attr('page', 'login');
@@ -109,9 +111,12 @@ $(document).ready ( function(){
             }
         });
 
+        //Проверка кнопок
+
         //Подгрузка маски
         var phoneMask = IMask(document.getElementById('phone-mask'), {mask: '+7 (000) 000-00-00'});
         var regExpMask = IMask(document.getElementById('pin-mask'), {mask: '0-0-0-0'});
+
     }
 });
 
@@ -208,7 +213,7 @@ function login() {
                 }
             }
         });
-
+        close_preload();
         //Подгрузка маски
         var phoneMask = IMask(document.getElementById('phone-mask'), {mask: '+7 (000) 000-00-00'});
         var regExpMask = IMask(document.getElementById('pin-mask'), {mask: '0-0-0-0'});
@@ -222,6 +227,9 @@ function login() {
             <div class="name">Войти</div>\
         <div>'
     );
+
+    tabbar_onclick();
+    //Проверка кнопок
 }
 
 
@@ -322,7 +330,6 @@ function RelBalance() {
                     localStorage.CardBalance = card.balance;
                     $("#layout .reload").html('<b>'+localStorage.CardBalance+'</b>');
                     confetti.start(1200, 50, 150);
-
                 }
 
             }
@@ -397,7 +404,7 @@ function profile() {
               Uuid: 'ba895b40-bd66-4e2f-bcdb-ae2d7309ff89'/*localStorage.Carduuid*/,
           },
           success: function(data) {
-              alert(Math.round(new Date().getTime()/1000.0));
+              //alert(Math.round(new Date().getTime()/1000.0));
               Check_arr = JSON.parse(data);
               Check_Numm = Object.keys(Check_arr).length;
               console.log(Check_arr);
@@ -807,14 +814,19 @@ function close_preload() {
 
 
 function tabbar_onclick() {
-  if (Page == "profile") {$("#tabbar .login.profile").html('<div class="button"><div class="icon"><i class="fas fa-barcode"></i></div><div class="name">Профиль</div><div>');
-  }else{$("#tabbar .login.profile").html('<div onclick="profile()" class="button"><div class="icon"><i class="fas fa-barcode"></i></div><div class="name">Профиль</div><div>');}
-  if (Page == "news") {$("#tabbar .news").html('<div class="button"><div class="icon"><i class="far fa-newspaper"></i></div><div class="name">Новости</div></div>');
-  }else{$("#tabbar .news").html('<div onclick="news()" class="button"><div class="icon"><i class="far fa-newspaper"></i></div><div class="name">Новости</div></div>');}
-  if (Page == "stocks") {$("#tabbar .stocks").html('<div class="button"><div class="icon"><i class="fas fa-tags"></i></div><div class="name">Акции</div></div>');
-  }else{$("#tabbar .stocks").html('<div onclick="stocks()" class="button"><div class="icon"><i class="fas fa-tags"></i></div><div class="name">Акции</div></div>');}
-  if (Page == "map") {$("#tabbar .map").html('<div class="button"><div class="icon"><i class="far fa-map"></i></div><div class="name">Карта</div></div>');
-  }else{$("#tabbar .map").html('<div onclick="map()" class="button"><div class="icon"><i class="far fa-map"></i></div><div class="name">Карта</div></div>');}
+    if (localStorage.account == "login") {
+        if (Page == "profile") {$("#tabbar .login.profile").html('<div class="button"><div class="icon"><i class="fas fa-barcode"></i></div><div class="name">Профиль</div><div>');}
+        else{$("#tabbar .login.profile").html('<div onclick="profile()" class="button"><div class="icon"><i class="fas fa-barcode"></i></div><div class="name">Профиль</div><div>');}
+    }else{
+        if (Page == "login") {$("#tabbar .login.profile").html('<div class="button active"><div class="icon"><i class="far fa-user-circle"></i></div><div class="name">Войти</div><div>');}
+        else{$("#tabbar .login.profile").html('<div onclick="login()" class="button">\<div class="icon"><i class="far fa-user-circle"></i></div>\<div class="name">Войти</div>\</div>');}
+    }
+    if (Page == "news") {$("#tabbar .news").html('<div class="button"><div class="icon"><i class="far fa-newspaper"></i></div><div class="name">Новости</div></div>');
+    }else{$("#tabbar .news").html('<div onclick="news()" class="button"><div class="icon"><i class="far fa-newspaper"></i></div><div class="name">Новости</div></div>');}
+    if (Page == "stocks") {$("#tabbar .stocks").html('<div class="button"><div class="icon"><i class="fas fa-tags"></i></div><div class="name">Акции</div></div>');
+    }else{$("#tabbar .stocks").html('<div onclick="stocks()" class="button"><div class="icon"><i class="fas fa-tags"></i></div><div class="name">Акции</div></div>');}
+    if (Page == "map") {$("#tabbar .map").html('<div class="button"><div class="icon"><i class="far fa-map"></i></div><div class="name">Карта</div></div>');
+    }else{$("#tabbar .map").html('<div onclick="map()" class="button"><div class="icon"><i class="far fa-map"></i></div><div class="name">Карта</div></div>');}
 }
 
 
