@@ -681,7 +681,7 @@ function map() {
         //Конец включена ли локация?
 
         var onSuccess = function(position) {
-            $('#preload').css('display', 'none');
+            close_preload();
             ymaps.ready(init);
 
             function init() {
