@@ -817,9 +817,11 @@ function tabbar_onclick() {
     if (localStorage.account == "login") {
         if (Page == "profile") {$("#tabbar .login.profile").html('<div class="button"><div class="icon"><i class="fas fa-barcode"></i></div><div class="name">Профиль</div><div>');}
         else{$("#tabbar .login.profile").html('<div onclick="profile()" class="button"><div class="icon"><i class="fas fa-barcode"></i></div><div class="name">Профиль</div><div>');}
+        $(".name-layout .exit").html('<i class="fas fa-sign-out-alt"></i>');
     }else{
         if (Page == "login") {$("#tabbar .login.profile").html('<div class="button active"><div class="icon"><i class="far fa-user-circle"></i></div><div class="name">Войти</div><div>');}
-        else{$("#tabbar .login.profile").html('<div onclick="login()" class="button">\<div class="icon"><i class="far fa-user-circle"></i></div>\<div class="name">Войти</div>\</div>');}
+        else{$("#tabbar .login.profile").html('<div onclick="login()" class="button"><div class="icon"><i class="far fa-user-circle"></i></div><div class="name">Войти</div></div>');}
+        $(".name-layout .exit").html('');
     }
     if (Page == "news") {$("#tabbar .news").html('<div class="button"><div class="icon"><i class="far fa-newspaper"></i></div><div class="name">Новости</div></div>');
     }else{$("#tabbar .news").html('<div onclick="news()" class="button"><div class="icon"><i class="far fa-newspaper"></i></div><div class="name">Новости</div></div>');}
