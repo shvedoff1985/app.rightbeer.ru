@@ -808,6 +808,7 @@ function close_preload() {
 
 
 function tabbar_onclick() {
+    navigator.vibrate(3000);
     if (localStorage.account == "login") {
         if (Page == "profile") {$("#tabbar .login.profile").html('<div class="button"><div class="icon"><i class="fas fa-barcode"></i></div><div class="name">Профиль</div><div>');}
         else{$("#tabbar .login.profile").html('<div onclick="profile()" class="button"><div class="icon"><i class="fas fa-barcode"></i></div><div class="name">Профиль</div><div>');}
