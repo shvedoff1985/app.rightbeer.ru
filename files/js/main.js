@@ -75,18 +75,46 @@ $(document).ready ( function(){
 
         $(function() {
             $('#submit-mask').click(function() {
-                $("#overlay").css("display", 'block');
                 $("#overlay").css("height", windowheight-55);
                 $(".PIN").css("margin-top", (windowheight-$(".PIN").height())/2 - 55-72 );
 
-                var xhr = new XMLHttpRequest();
-                xhr.open('GET', 'https://smsc.ru/sys/send.php?login=shvedoff1985&psw=b12132ff02dd8e140df8fa5c59c23df1&phones='+$("#phone-mask").val()+'&mes=code&call=1&fmt=3', false);
-                xhr.send();
+                Phone = $("#phone-mask").val().split('+').join('');
+                Phone = Phone.split(' ').join('');
+                Phone = Phone.split('(').join('');
+                Phone = Phone.split(')').join('');
+                Phone = Phone.split('-').join('');
+                $.ajax({
+                  type: 'POST',
+                  url: 'https://app.maksf.ru/getpin.php',
+                  data: {
+                      phone: Phone,
+                      Authorization: 'd3577f6c-05e4-430b-bfa9-561f4ad4b7ea',
+                      accept: 'application/json',
+                  },
+                  success: function(data) {
+                      card = JSON.parse(data)
+                      console.log(card);
+                      if (card.message == "Карта не найдена") {
+                        //Карта не найдена
+                        alert('В базе нет такого номера');
+                        $("#overlay").css("display", 'none');
+                      }else{
+                        //Карта найдена
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('GET', 'https://smsc.ru/sys/send.php?login=shvedoff1985&psw=b12132ff02dd8e140df8fa5c59c23df1&phones='+$("#phone-mask").val()+'&mes=code&call=1&fmt=3', false);
+                        xhr.send();
+                        console.log(xhr.responseText);
+                        if (xhr.status != 200) {
+                          $("#overlay").css("display", 'none');
+                        } else {
+                            pin = JSON.parse(xhr.responseText);
+                            $("#overlay").css("display", 'block');
+                        }
+                      }
+                  }
+              });
 
-                if (xhr.status != 200) {
-                } else {
-                    pin = JSON.parse(xhr.responseText);
-                }
+
             });
             $('#overlay .close').click(function() {
                 $("#overlay").css("display", 'none');
@@ -179,17 +207,47 @@ function login() {
 
         $(function() {
             $('#submit-mask').click(function() {
-                $("#overlay").css("display", 'block');
+                //$("#overlay").css("display", 'block');
                 $("#overlay").css("height", windowheight-55);
                 $(".PIN").css("margin-top", (windowheight-$(".PIN").height())/2 - 55-72 );
 
-                var xhr = new XMLHttpRequest();
-                xhr.open('GET', 'https://smsc.ru/sys/send.php?login=shvedoff1985&psw=b12132ff02dd8e140df8fa5c59c23df1&phones='+$("#phone-mask").val()+'&mes=code&call=1&fmt=3', false);
-                xhr.send();
-                if (xhr.status != 200) {
-                } else {
-                    pin = JSON.parse(xhr.responseText);
-                }
+                Phone = $("#phone-mask").val().split('+').join('');
+                Phone = Phone.split(' ').join('');
+                Phone = Phone.split('(').join('');
+                Phone = Phone.split(')').join('');
+                Phone = Phone.split('-').join('');
+                $.ajax({
+                  type: 'POST',
+                  url: 'https://app.maksf.ru/getpin.php',
+                  data: {
+                      phone: Phone,
+                      Authorization: 'd3577f6c-05e4-430b-bfa9-561f4ad4b7ea',
+                      accept: 'application/json',
+                  },
+                  success: function(data) {
+                      card = JSON.parse(data)
+                      console.log(card);
+                      if (card.message == "Карта не найдена") {
+                        //Карта не найдена
+                        alert('В базе нет такого номера');
+                        $("#overlay").css("display", 'none');
+                      }else{
+                        //Карта найдена
+                        var xhr = new XMLHttpRequest();
+                        xhr.open('GET', 'https://smsc.ru/sys/send.php?login=shvedoff1985&psw=b12132ff02dd8e140df8fa5c59c23df1&phones='+$("#phone-mask").val()+'&mes=code&call=1&fmt=3', false);
+                        xhr.send();
+                        console.log(xhr.responseText);
+                        if (xhr.status != 200) {
+                          $("#overlay").css("display", 'none');
+                        } else {
+                            pin = JSON.parse(xhr.responseText);
+                            $("#overlay").css("display", 'block');
+                        }
+                      }
+
+
+                  }
+              });
             });
             $('#overlay .close').click(function() {
                 $("#overlay").css("display", 'none');
