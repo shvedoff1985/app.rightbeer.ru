@@ -5,8 +5,8 @@ window.onload = function() {
    $("#tabbar").css("top",tabbar-72);
    windowheight = document.documentElement.clientHeight;
    windowwidth = $(document).width();
-   $("#overlay").css("height", windowheight-55);
-   $(".PIN").css("margin-top", (windowheight-$(".PIN").height())/2 - 55-72 );
+   $("#overlay").css("height", windowheight+72);
+   //$(".PIN").css("margin-top", (windowheight-$(".PIN").height())/2 - 55-72 );
 };
 
 setInterval(function(){

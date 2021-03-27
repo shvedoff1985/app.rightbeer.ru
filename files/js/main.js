@@ -58,8 +58,13 @@ $(document).ready ( function(){
                     <input id="pin-mask" type="" name="" placeholder="_-_-_-_">\
                 </div>\
             </div>\
-            <div class="close"><i class="far fa-times-circle"></i></div>'
+            <p>Позвонить повторно через</p>'
         );
+
+        //  /\
+        //  |
+        //  |
+        //<div class="close"><i class="far fa-times-circle"></i></div>
 
         //Код страницы Login
         let pin;
@@ -75,14 +80,17 @@ $(document).ready ( function(){
 
         $(function() {
             $('#submit-mask').click(function() {
-                $("#overlay").css("height", windowheight-55);
-                $(".PIN").css("margin-top", (windowheight-$(".PIN").height())/2 - 55-72 );
+                $("#overlay").css("height", windowheight);
+                $(".PIN").css("margin-top", (windowheight-$(".PIN").height())/3 - 55-72 );
 
                 Phone = $("#phone-mask").val().split('+').join('');
                 Phone = Phone.split(' ').join('');
                 Phone = Phone.split('(').join('');
                 Phone = Phone.split(')').join('');
                 Phone = Phone.split('-').join('');
+                $("#overlay").css("display", 'block');
+                //
+                /*
                 $.ajax({
                   type: 'POST',
                   url: 'https://app.maksf.ru/getpin.php',
@@ -111,8 +119,10 @@ $(document).ready ( function(){
                             $("#overlay").css("display", 'block');
                         }
                       }
+
                   }
               });
+              */
 
 
             });
@@ -190,8 +200,13 @@ function login() {
                     <input id="pin-mask" type="" name="" placeholder="_-_-_-_">\
                 </div>\
             </div>\
-            <div class="close"><i class="far fa-times-circle"></i></div>'
+            <p>Позвонить повторно через 60сек</p>'
         );
+
+        //  /\
+        //  |
+        //  |
+        //<div class="close"><i class="far fa-times-circle"></i></div>
 
         //Код страницы Login
         let pin;
@@ -208,14 +223,17 @@ function login() {
         $(function() {
             $('#submit-mask').click(function() {
                 //$("#overlay").css("display", 'block');
-                $("#overlay").css("height", windowheight-55);
-                $(".PIN").css("margin-top", (windowheight-$(".PIN").height())/2 - 55-72 );
+                $("#overlay").css("height", windowheight);
+                $(".PIN").css("margin-top", (windowheight-$(".PIN").height())/3 - 55-72 );
 
                 Phone = $("#phone-mask").val().split('+').join('');
                 Phone = Phone.split(' ').join('');
                 Phone = Phone.split('(').join('');
                 Phone = Phone.split(')').join('');
                 Phone = Phone.split('-').join('');
+                $("#overlay").css("display", 'block');
+                //
+                /*
                 $.ajax({
                   type: 'POST',
                   url: 'https://app.maksf.ru/getpin.php',
@@ -247,6 +265,7 @@ function login() {
 
                   }
               });
+              */
             });
             $('#overlay .close').click(function() {
                 $("#overlay").css("display", 'none');

@@ -292,11 +292,11 @@ body {
 
 #overlay {
     position: absolute;
-    z-index: 21;
+    z-index: 31;
     background-color: rgba(0, 0, 0, 0.6);
-    ;
     width: 100%;
     display: none;
+    margin-top: -55px;
 }
 
 #overlay .PIN {
