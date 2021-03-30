@@ -5,8 +5,10 @@ window.onload = function() {
    $("#tabbar").css("top",tabbar-72);
    windowheight = document.documentElement.clientHeight;
    windowwidth = $(document).width();
-   $("#overlay").css("height", windowheight-55);
+   $("#overlay").css("height", windowheight);
+   $("#error_code").css("height", windowheight);
    $(".PIN").css("margin-top", (windowheight-$(".PIN").height())/2 - 55-72 );
+   $(".block").css("margin-top", (windowheight-$(".PIN").height())/2 - 55-72 );
 };
 
 setInterval(function(){

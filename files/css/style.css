@@ -189,6 +189,33 @@ body {
     color: #c1c8c9;
 }
 
+#ofline {
+    margin-top: -55px;
+    position: absolute;
+    z-index: 31;
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    display: none;
+    animation: preload 1.3s ease-in-out;
+    animation-fill-mode: forwards
+}
+#ofline h3 {
+    font-size: 30px;
+    padding: 0 30px;
+    text-align: center;
+    margin-top: 30px;
+}
+#ofline img {
+    position: absolute;
+    width: 140px;
+    opacity: 1;
+    margin: 30px calc((100% - 120px) / 2);
+    animation: preloadM 1s infinite ease-in-out;
+}
+
+
+
 #preload-main {
     margin-top: -55px;
     position: absolute;
@@ -200,6 +227,7 @@ body {
     animation: preload 1.3s ease-in-out;
     animation-fill-mode: forwards
 }
+
 
 #preload-main img {
     position: absolute;
@@ -292,9 +320,9 @@ body {
 
 #overlay {
     position: absolute;
-    z-index: 21;
+    z-index: 41;
     background-color: rgba(0, 0, 0, 0.6);
-    ;
+    margin-top: -55px;
     width: 100%;
     display: none;
 }
@@ -311,7 +339,63 @@ body {
     text-align: center;
 }
 
+#overlay #timer_close {
+    text-shadow: 0 0 13px black;
+    color: white;
+    text-align: center;
+    font-weight: 500;
+    font-size: 14px;
+    margin-top: 14px;
+}
+
+#overlay #timer_close .repeat {
+    text-decoration: underline;
+}
 #overlay .close {
+    text-align: center;
+    font-size: 35px;
+    margin-top: 30px;
+    color: #ff4d4d;
+}
+
+
+
+
+
+
+
+
+
+
+#error_code {
+    position: absolute;
+    z-index: 51;
+    background-color: rgba(0, 0, 0, 0.6);
+    margin-top: -55px;
+    width: 100%;
+    display: none;
+}
+
+#error_code .block {
+    width: calc(100% - (75px * 2));
+    margin: calc((100vh - 250px) / 2) 50px 0 50px;
+    background-color: #ebebeb;
+    border-radius: 30px;
+    padding: 15px 25px 25px 25px;
+}
+
+#error_code .block h3 {
+    font-weight: 600;
+    font-size: 18px;
+
+}
+
+#error_code .block p {
+    margin-top: 10px;
+    font-size: 15px;
+}
+
+#error_code .close {
     text-align: center;
     font-size: 35px;
     margin-top: 30px;
@@ -442,4 +526,76 @@ body {
     white-space: nowrap;
     height: 30px;
     overflow-x: scroll;
+}
+
+
+
+
+#ofline .card .code svg#barcode > rect {
+    fill: #ebebeb !important;
+}
+
+
+#ofline .card {
+    width: calc(100% - 70px);
+    display: inline-block;
+    margin: 10px 10px;
+    background-color: #ebebeb;
+    border-radius: 30px;
+    padding: 25px 25px 15px 25px;
+    text-align: center;
+}
+
+#ofline .card .title {
+    font-weight: 700;
+    color: #333333;
+    margin-bottom: 10px;
+}
+
+#ofline .card .code svg#barcode {
+    transform: scale(1.3) !important;
+    margin: 25px;
+}
+
+
+
+
+
+
+
+#pin-mask.animation {
+    animation: input_error 1s ease-out;
+    animation-fill-mode: forwards;
+    margin-left: 0;
+}
+
+
+@keyframes input_error {
+    0% {
+
+    }
+    20% {
+        color: #ff4d4d;
+        margin-left: 0;
+    }
+    50% {
+        margin-left: -10px;
+    }
+    60% {
+        margin-left: 10px;
+    }
+    70% {
+        margin-left: -10px;
+    }
+    80% {
+        margin-left: 10px;
+    }
+    90% {
+        color: #ff4d4d;
+        margin-left: 0px;
+    }
+    100% {
+        text-align: center;
+        color: black;
+    }
 }

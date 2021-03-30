@@ -1,152 +1,91 @@
 let User = false;
-    First_exit = false;
-    Phone = '';
-    Page = 'login';
+First_exit = false;
+Phone = '';
+Page = 'login';
+Offline = 'true'
 
 if (localStorage.account == "login") {
-    User=true;
-    Page='profile';
+    User = true;
+    Page = 'profile';
     profile();
-}else{
-    User=false;
-    Page='login';
+} else {
+    User = false;
+    Page = 'login';
     login();
 }
 
 
-//Главный прелоудер
-if(!First_exit) {setTimeout(function(){$("#preload-main").css("display", "none");}, 1350);}else{}
 
-
-$(document).ready ( function(){
-    if (!User && Page == 'login') {
-
-
-        $('#preload').css('display', 'block');
-        close_preload();
-        //Атрибут Page для layout
-        $('#layout').removeAttr('page');
-        $('#layout').attr('page', 'login');
-
-        //Название страницы
-        $(".name-layout .name").html('Авторизация');
-
-        //Загрузка контента
-        $("#layout").html(
-            '<div class="logo">\
-                <img src="files/images/logo-light.png" width="200">\
-            </div>\
-            <div class="box-login">\
-                <div class="input-group">\
-                    <label>Введите номер телефона</label>\
-                    <input id="phone-mask" type="" name="" placeholder="+7 (___) ___-__-__">\
+document.addEventListener("offline", onOffline, false);
+document.addEventListener("online", onLine, false);
+function onOffline() {
+    if (localStorage.CardNumber) {
+        Offline = false;
+        $('#ofline').html('');
+        $('#ofline').prepend('\
+            <div class="card">\
+                <div class="title">\
+                    ' + localStorage.FormHolder+ '\
                 </div>\
-                <div class="input-group">\
-                    <input id="submit-mask" type="submit" class="shadow-box" name="" value="Войти" disabled="disabled">\
-                </div>\
-                <div class="back-call">\
-                    <a  href="tel:+79998886655">Обратная связь</a>\
-                </div>\
-            </div>'
-        );
-
-        //Подгрузка оверлея
-        $("#overlay").html(
-            '<div class="PIN">\
-                <div class="input-group">\
-                    <label>Введите код подтверждения (последние 4 цифры входящего звонка)</label>\
-                    <input id="pin-mask" type="" name="" placeholder="_-_-_-_">\
+                <div class="code">\
+                    <svg id="barcode"></svg>\
                 </div>\
             </div>\
-            <div class="close"><i class="far fa-times-circle"></i></div>'
-        );
-
-        //Код страницы Login
-        let pin;
-
-        $('.box-login').on('input', function () {
-            if($("#phone-mask").val().length == 18) {
-                $('#submit-mask').removeAttr('disabled');
-            }else{
-                $('#submit-mask').attr('disabled', 'disabled');
-            }
-        });
-
-
-        $(function() {
-            $('#submit-mask').click(function() {
-                $("#overlay").css("height", windowheight-55);
-                $(".PIN").css("margin-top", (windowheight-$(".PIN").height())/2 - 55-72 );
-
-                Phone = $("#phone-mask").val().split('+').join('');
-                Phone = Phone.split(' ').join('');
-                Phone = Phone.split('(').join('');
-                Phone = Phone.split(')').join('');
-                Phone = Phone.split('-').join('');
-                $.ajax({
-                  type: 'POST',
-                  url: 'https://app.maksf.ru/getpin.php',
-                  data: {
-                      phone: Phone,
-                      Authorization: 'd3577f6c-05e4-430b-bfa9-561f4ad4b7ea',
-                      accept: 'application/json',
-                  },
-                  success: function(data) {
-                      card = JSON.parse(data)
-                      console.log(card);
-                      if (card.message == "Карта не найдена") {
-                        //Карта не найдена
-                        alert('В базе нет такого номера');
-                        $("#overlay").css("display", 'none');
-                      }else{
-                        //Карта найдена
-                        var xhr = new XMLHttpRequest();
-                        xhr.open('GET', 'https://smsc.ru/sys/send.php?login=shvedoff1985&psw=b12132ff02dd8e140df8fa5c59c23df1&phones='+$("#phone-mask").val()+'&mes=code&call=1&fmt=3', false);
-                        xhr.send();
-                        console.log(xhr.responseText);
-                        if (xhr.status != 200) {
-                          $("#overlay").css("display", 'none');
-                        } else {
-                            pin = JSON.parse(xhr.responseText);
-                            $("#overlay").css("display", 'block');
-                        }
-                      }
-                  }
-              });
-
-
-            });
-            $('#overlay .close').click(function() {
-                $("#overlay").css("display", 'none');
-            });
-        });
-
-        $('.PIN').on('input', function () {
-            if($("#pin-mask").val().length == 7) {
-                pincode = $("#pin-mask").val();
-                pincode = pincode.split('-').join('');
-                pin = pin.code;
-                pin = pin.substr(2, 6);
-                if (pincode == pin) {
-
-                    $("#overlay").css("display", 'none');
-                    $("#overlay").html('');
-                    Phone = $("#phone-mask").val();
-                    authorization();
-                }else{
-                    alert('Неверный код');
-                }
-            }
-        });
-
-        //Проверка кнопок
-
-        //Подгрузка маски
-        var phoneMask = IMask(document.getElementById('phone-mask'), {mask: '+7 (000) 000-00-00'});
-        var regExpMask = IMask(document.getElementById('pin-mask'), {mask: '0-0-0-0'});
-
+        ');
+        JsBarcode("#barcode", localStorage.CardNumber);
     }
-});
+    $('#ofline').append('\
+        <h3>Плохое интернет соединение</h3>\
+    ');
+    $('#ofline').append('\
+        <img src="files/images/logo-dark.png" />\
+    ');
+    $('#ofline').css('display','block');
+}
+function onLine() {
+    if (Offline == 'false') {
+        $('#ofline').css('display','none');
+        $('#ofline').html('');
+    }else{
+        if (localStorage.account == "login") {
+            User = true;
+            Page = 'profile';
+            profile();
+        } else {
+            User = false;
+            Page = 'login';
+            login();
+        }
+        $('#ofline').css('display','none');
+        $('#ofline').html('');
+    }
+}
+
+//Главный прелоудер
+if (!First_exit) {
+    setTimeout(function () {
+        $("#preload-main").css("display", "none");
+    }, 1350);
+} else {}
+
+
+function loaderror(text) {
+    $('#error_code').css('display', 'block');
+    $("#error_code").html(
+        '<div class="block">\
+            <h3>Ошибка</h3>\
+            <p>'+text+'</p>\
+        </div>\
+        <p style="text-align: center;"><i class="close far fa-times-circle"></i></p>'
+    );
+
+    $(function () {
+        $('#error_code .close').click(function () {
+            $('#error_code').css('display', 'none');
+        });
+    });
+}
+
 
 function login() {
     $('#preload').css('display', 'block');
@@ -177,7 +116,7 @@ function login() {
                     <input id="submit-mask" type="submit" class="shadow-box" name="" value="Войти" disabled="disabled">\
                 </div>\
                 <div class="back-call">\
-                    <a  href="tel:+79998886655">Обратная связь</a>\
+                    <a  href="tel:+79623271000">Обратная связь</a>\
                 </div>\
             </div>'
         );
@@ -190,26 +129,26 @@ function login() {
                     <input id="pin-mask" type="" name="" placeholder="_-_-_-_">\
                 </div>\
             </div>\
-            <div class="close"><i class="far fa-times-circle"></i></div>'
+            <p id="timer_close">Позвонить повторно через <span class="seconds">160</span> сек</p>'
         );
 
         //Код страницы Login
         let pin;
 
         $('.box-login').on('input', function () {
-            if($("#phone-mask").val().length == 18) {
+            if ($("#phone-mask").val().length == 18) {
                 $('#submit-mask').removeAttr('disabled');
-            }else{
+            } else {
                 $('#submit-mask').attr('disabled', 'disabled');
             }
         });
 
 
-        $(function() {
-            $('#submit-mask').click(function() {
+        $(function () {
+            $('#submit-mask').click(function () {
                 //$("#overlay").css("display", 'block');
-                $("#overlay").css("height", windowheight-55);
-                $(".PIN").css("margin-top", (windowheight-$(".PIN").height())/2 - 55-72 );
+                $("#overlay").css("height", windowheight);
+                $(".PIN").css("margin-top", (windowheight - $(".PIN").height()) / 3 - 55 - 72);
 
                 Phone = $("#phone-mask").val().split('+').join('');
                 Phone = Phone.split(' ').join('');
@@ -217,47 +156,72 @@ function login() {
                 Phone = Phone.split(')').join('');
                 Phone = Phone.split('-').join('');
                 $.ajax({
-                  type: 'POST',
-                  url: 'https://app.maksf.ru/getpin.php',
-                  data: {
-                      phone: Phone,
-                      Authorization: 'd3577f6c-05e4-430b-bfa9-561f4ad4b7ea',
-                      accept: 'application/json',
-                  },
-                  success: function(data) {
-                      card = JSON.parse(data)
-                      console.log(card);
-                      if (card.message == "Карта не найдена") {
-                        //Карта не найдена
-                        alert('В базе нет такого номера');
-                        $("#overlay").css("display", 'none');
-                      }else{
-                        //Карта найдена
-                        var xhr = new XMLHttpRequest();
-                        xhr.open('GET', 'https://smsc.ru/sys/send.php?login=shvedoff1985&psw=b12132ff02dd8e140df8fa5c59c23df1&phones='+$("#phone-mask").val()+'&mes=code&call=1&fmt=3', false);
-                        xhr.send();
-                        console.log(xhr.responseText);
-                        if (xhr.status != 200) {
-                          $("#overlay").css("display", 'none');
+                    type: 'POST',
+                    url: 'https://app.maksf.ru/getpin.php',
+                    data: {
+                        phone: Phone,
+                        Authorization: 'd3577f6c-05e4-430b-bfa9-561f4ad4b7ea',
+                        accept: 'application/json',
+                    },
+                    success: function (data) {
+                        card = JSON.parse(data)
+                        console.log(card);
+                        if (card.message == "Карта не найдена") {
+                            //Карта не найдена
+                            //alert('В базе нет такого номера');
+                            loaderror('В базе нет данного номера телефона. Обратитесь на кассу для оформления карты лояльности.');
+                            $("#overlay").css("display", 'none');
                         } else {
-                            pin = JSON.parse(xhr.responseText);
+                            send_pin();
                             $("#overlay").css("display", 'block');
                         }
-                      }
 
-                  }
-              });
+                    }
+                });
             });
-            $('#overlay .close').click(function() {
-                $("#overlay").css("display", 'none');
-            });
+
         });
 
+        function send_pin() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('GET', 'https://smsc.ru/sys/send.php?login=shvedoff1985&psw=b12132ff02dd8e140df8fa5c59c23df1&phones=' + $("#phone-mask").val() + '&mes=code&call=1&fmt=3', false);
+            xhr.send();
+            console.log(xhr.responseText);
+            if (xhr.status != 200) {
+                $("#overlay").css("display", 'none');
+            } else {
+                pin = JSON.parse(xhr.responseText);
+                $("#overlay").css("display", 'block');
+            }
+
+            pincode_timer(200);
+
+        }
+
+        function pincode_timer(second) {
+            $("#timer_close").html('<p id="timer_close">Позвонить повторно через <span class="seconds">' + second + '</span> сек</p>');
+            var _Seconds = second,
+                int;
+            int = setInterval(function () { // запускаем интервал
+                if (_Seconds > 0) {
+                    _Seconds--; // вычитаем 1
+                    $('.seconds').text(_Seconds); // выводим получившееся значение в блок
+                } else {
+                    clearInterval(int); // очищаем интервал, чтобы он не продолжал работу при _Seconds = 0
+                    $("#timer_close").html('Позвонить повторно');
+                    $('#timer_close').click(function () {
+                        send_pin()
+                    });
+                }
+            }, 1000);
+        }
+
         $('.PIN').on('input', function () {
-            if($("#pin-mask").val().length == 7) {
+            if ($("#pin-mask").val().length == 7) {
                 pincode = $("#pin-mask").val();
                 pincode = pincode.split('-').join('');
-                pin = pin.code;
+                //pin = pin.code;
+                pin = '999999';
                 pin = pin.substr(2, 6);
                 //console.log(pin.code+'-'+pin);
                 if (pincode == pin) {
@@ -265,15 +229,30 @@ function login() {
                     $("#overlay").html('');
                     Phone = $("#phone-mask").val();
                     authorization();
-                }else{
-                    alert('Неверный код');
+                } else {
+                    //alert('Неверный код');
+                    $("#pin-mask").addClass('animation');
+                    setTimeout(function () {
+                        $('#pin-mask').removeClass('animation');
+                        $("#pin-mask").val('0');
+                        $("#pin-mask").val('');
+                        $("#pin-mask").remove();
+                        $("#overlay .input-group").append('<input id="pin-mask" type="" name="" placeholder="_-_-_-_">');
+                        var regExpMasks = IMask(document.getElementById('pin-mask'), {
+                            mask: '0-0-0-0'
+                        });
+                    }, 1010);
                 }
             }
         });
         close_preload();
         //Подгрузка маски
-        var phoneMask = IMask(document.getElementById('phone-mask'), {mask: '+7 (000) 000-00-00'});
-        var regExpMask = IMask(document.getElementById('pin-mask'), {mask: '0-0-0-0'});
+        var phoneMask = IMask(document.getElementById('phone-mask'), {
+            mask: '+7 (000) 000-00-00'
+        });
+        var regExpMask = IMask(document.getElementById('pin-mask'), {
+            mask: '0-0-0-0'
+        });
     }
 
     //Нижний юлок
@@ -288,8 +267,6 @@ function login() {
     tabbar_onclick();
     //Проверка кнопок
 }
-
-
 
 
 function authorization() {
@@ -308,84 +285,66 @@ function authorization() {
     //Отправляем запрос на получение данных
 
     $.ajax({
-      type: 'POST',
-      url: 'https://app.maksf.ru/getcard.php',
-      data: {
-          phone: Phone,
-          Authorization: 'd3577f6c-05e4-430b-bfa9-561f4ad4b7ea',
-          accept: 'application/json',
-      },
-      success: function(data) {
-          card = JSON.parse(data)
+        type: 'POST',
+        url: 'https://app.maksf.ru/getcard.php',
+        data: {
+            phone: Phone,
+            Authorization: 'd3577f6c-05e4-430b-bfa9-561f4ad4b7ea',
+            accept: 'application/json',
+        },
+        success: function (data) {
+            card = JSON.parse(data)
 
 
-          //Проверка, существует ли карта
-          if (card.message == "Карта не найдена") {
-            //Если карта не существует
+            //Проверка, существует ли карта
+            if (card.message == "Карта не найдена") {
+                //Если карта не существует
 
-            //Отправляем на регистраницю
-
-
-          }else{
-            //Если карта сущетсвует
-            //Сохраняем данные
-            localStorage.account = 'login';
-            localStorage.Carduuid = card.uuid;
-            localStorage.CardNumber = card.number;
-            localStorage.CardBalance = card.balance;
-            localStorage.FormHolder = card.form.holder;
-            localStorage.FormHolder = card.form.holder;
-            localStorage.FormPhone = card.form.phone;
-            localStorage.FormBirthdate = card.form.birthdate;
+                //Отправляем на регистраницю
 
 
-            //Отправляем в профиль
-            profile();
-          }
-          //Проверка есть ли карта
-          close_preload();
-      }
-  });
+            } else {
+                //Если карта сущетсвует
+                //Сохраняем данные
+                localStorage.account = 'login';
+                localStorage.Carduuid = card.uuid;
+                localStorage.CardNumber = card.number;
+                localStorage.CardBalance = card.balance;
+                localStorage.FormHolder = card.form.holder;
+                localStorage.FormHolder = card.form.holder;
+                localStorage.FormPhone = card.form.phone;
+                localStorage.FormBirthdate = card.form.birthdate;
 
+
+                //Отправляем в профиль
+                profile();
+            }
+            //Проверка есть ли карта
+            close_preload();
+        }
+    });
 
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 function RelBalance() {
     if (localStorage.account == "login") {
 
         $.ajax({
-          type: 'POST',
-          url: 'https://app.maksf.ru/getcard.php',
-          data: {
-              phone: localStorage.FormPhone,
-              Authorization: 'd3577f6c-05e4-430b-bfa9-561f4ad4b7ea',
-              accept: 'application/json',
-          },
-          success: function(data) {
+            type: 'POST',
+            url: 'https://app.maksf.ru/getcard.php',
+            data: {
+                phone: localStorage.FormPhone,
+                Authorization: 'd3577f6c-05e4-430b-bfa9-561f4ad4b7ea',
+                accept: 'application/json',
+            },
+            success: function (data) {
                 card = JSON.parse(data)
 
-                if(localStorage.CardBalance !== card.balance) {
+                if (localStorage.CardBalance !== card.balance) {
                     localStorage.CardBalance = card.balance;
-                    $("#layout .reload").html('<b>'+localStorage.CardBalance+'</b>');
+                    $("#layout .reload").html('<b>' + localStorage.CardBalance + '</b>');
                     confetti.start(1200, 50, 150);
                 }
 
@@ -396,11 +355,6 @@ function RelBalance() {
 }
 
 
-
-
-
-
-
 function profile() {
     $('#preload').css('display', 'block');
 
@@ -409,10 +363,9 @@ function profile() {
     Page = 'profile';
     RelBalance();
 
-    setInterval(function(){
+    setInterval(function () {
         RelBalance();
     }, 20000);
-
 
 
     //Атрибут Page для layout
@@ -429,7 +382,7 @@ function profile() {
     $("#layout").html(
         '<div class="card">\
             <div class="title">\
-                '+localStorage.FormHolder.toUpperCase()+'\
+                ' + localStorage.FormHolder.toUpperCase() + '\
             </div>\
             <div class="code">\
                 <svg id="barcode"></svg>\
@@ -440,7 +393,7 @@ function profile() {
                 Баланс: \
             </div>\
             <div class="reload">\
-                <b>'+localStorage.CardBalance+'</b>\
+                <b>' + localStorage.CardBalance + '</b>\
             </div>\
         </div>\
         <div class="card check">\
@@ -453,66 +406,65 @@ function profile() {
         ');
 
 
-
-        $.ajax({
-          type: 'POST',
-          url: 'https://app.maksf.ru/getcheck.php',
-          data: {
-              Uuid: 'ba895b40-bd66-4e2f-bcdb-ae2d7309ff89'/*localStorage.Carduuid*/,
-          },
-          success: function(data) {
-              //alert(Math.round(new Date().getTime()/1000.0));
-              Check_arr = JSON.parse(data);
-              Check_Numm = Object.keys(Check_arr).length;
-              console.log(Check_arr);
-              for (var i = 0; i < Check_Numm; i++) {
+    $.ajax({
+        type: 'POST',
+        url: 'https://app.maksf.ru/getcheck.php',
+        data: {
+            Uuid: 'ba895b40-bd66-4e2f-bcdb-ae2d7309ff89' /*localStorage.Carduuid*/ ,
+        },
+        success: function (data) {
+            //alert(Math.round(new Date().getTime()/1000.0));
+            Check_arr = JSON.parse(data);
+            Check_Numm = Object.keys(Check_arr).length;
+            console.log(Check_arr);
+            for (var i = 0; i < Check_Numm; i++) {
                 $(".check_card").append(
                     '<div class="cards">\
-                        <div class="text">Потрачено: <b>'+Check_arr[i].total+'</b> | Начислен бонусов: <b>'+Check_arr[i].bonus+'</b> | Номер платежа: <b>'+Check_arr[i].number+'</b> | Дата: <b>'+Check_arr[i].period+'</b></div>\
+                        <div class="text">Потрачено: <b>' + Check_arr[i].total + '</b> | Начислен бонусов: <b>' + Check_arr[i].bonus + '</b> | Номер платежа: <b>' + Check_arr[i].number + '</b> | Дата: <b>' + Check_arr[i].period + '</b></div>\
                     </div>\
                     '
                 );
-              }
-          },
-          error: function(xhr, textStatus, error){
-
-          }
-        });
-
-
-        /*
-        var News = new XMLHttpRequest();
-        News.open('GET', 'http://app.maksf.ru/getcheck.php', false);
-        News.send();
-        //console.log(News.responseText);
-        if (News.status != 200) {
-          $('#preload').css('display', 'block');
-        } else {
-            close_preload();
-            News_arr = JSON.parse(News.responseText);
-            News_Numm = Object.keys(News_arr).length;
-
-            for (var i = 1; i < News_Numm+1 ; i++) {
-
-
-              $("#layout").append(
-                  '<div class="card">\
-                      <img src="'+News_arr[i]['image']+'">\
-                      <div class="title">'+News_arr[i].name+'</div>\
-                      <div class="text">'+News_arr[i].text+'</div>\
-                  </div>\
-                  '
-              );
             }
-        }
-        */
+        },
+        error: function (xhr, textStatus, error) {
 
-        //'<br>\
-        //Номер карты: ' +localStorage.CardNumber+ '<br>\
-        //Пользователь: ' +localStorage.FormHolder+ '<br>\
-        //Номер телефона: ' +localStorage.FormPhone+ '<br>\
-        //Дата рождения: ' +localStorage.FormBirthdate+ '<br>\
-        //Баланс: ' +localStorage.CardBalance+ '<br>'
+        }
+    });
+
+
+    /*
+    var News = new XMLHttpRequest();
+    News.open('GET', 'http://app.maksf.ru/getcheck.php', false);
+    News.send();
+    //console.log(News.responseText);
+    if (News.status != 200) {
+      $('#preload').css('display', 'block');
+    } else {
+        close_preload();
+        News_arr = JSON.parse(News.responseText);
+        News_Numm = Object.keys(News_arr).length;
+
+        for (var i = 1; i < News_Numm+1 ; i++) {
+
+
+          $("#layout").append(
+              '<div class="card">\
+                  <img src="'+News_arr[i]['image']+'">\
+                  <div class="title">'+News_arr[i].name+'</div>\
+                  <div class="text">'+News_arr[i].text+'</div>\
+              </div>\
+              '
+          );
+        }
+    }
+    */
+
+    //'<br>\
+    //Номер карты: ' +localStorage.CardNumber+ '<br>\
+    //Пользователь: ' +localStorage.FormHolder+ '<br>\
+    //Номер телефона: ' +localStorage.FormPhone+ '<br>\
+    //Дата рождения: ' +localStorage.FormBirthdate+ '<br>\
+    //Баланс: ' +localStorage.CardBalance+ '<br>'
 
 
     JsBarcode("#barcode", localStorage.CardNumber);
@@ -527,7 +479,7 @@ function profile() {
             <div>'
         );
         $(".name-layout .exit").html('<i class="fas fa-sign-out-alt"></i>');
-    }else{
+    } else {
         $("#tabbar .login.profile").html(
             '<div onclick="login()" class="button">\
                 <div class="icon"><i class="far fa-user-circle"></i></div>\
@@ -559,36 +511,30 @@ function news() {
     $("#layout").html('<div class="lineP"></div>');
 
 
-
     var News = new XMLHttpRequest();
-    News.open('GET', 'https://app.maksf.ru/news.php', false);
+    News.open('GET', 'https://app.maksf.ru/newsы.php', false);
     News.send();
     //console.log(News.responseText);
     if (News.status != 200) {
-      $('#preload').css('display', 'block');
+        $('#preload').css('display', 'block');
     } else {
         close_preload();
         News_arr = JSON.parse(News.responseText);
         News_Numm = Object.keys(News_arr).length;
 
-        for (var i = 1; i < News_Numm+1 ; i++) {
+        for (var i = 1; i < News_Numm + 1; i++) {
 
 
-          $("#layout").append(
-              '<div class="card">\
-                  <img src="'+News_arr[i]['image']+'">\
-                  <div class="title">'+News_arr[i].name+'</div>\
-                  <div class="text">'+News_arr[i].text+'</div>\
+            $("#layout").append(
+                '<div class="card">\
+                  <img src="' + News_arr[i]['image'] + '">\
+                  <div class="title">' + News_arr[i].name + '</div>\
+                  <div class="text">' + News_arr[i].text + '</div>\
               </div>\
               '
-          );
+            );
         }
     }
-
-
-
-
-
 
 
     //Нижний юлок
@@ -601,7 +547,7 @@ function news() {
             <div>'
         );
         $(".name-layout .exit").html('<i class="fas fa-sign-out-alt"></i>');
-    }else{
+    } else {
         $("#tabbar .login.profile").html(
             '<div onclick="login()" class="button">\
                 <div class="icon"><i class="far fa-user-circle"></i></div>\
@@ -616,9 +562,7 @@ function news() {
     $("#tabbar .news .button").addClass('active');
 
 
-
 }
-
 
 
 function stocks() {
@@ -637,33 +581,30 @@ function stocks() {
     $("#layout").html('<div class="lineP"></div>');
 
 
-
     var News = new XMLHttpRequest();
     News.open('GET', 'https://app.maksf.ru/stocks.php', false);
     News.send();
     //console.log(News.responseText);
     if (News.status != 200) {
-      $('#preload').css('display', 'block');
+        $('#preload').css('display', 'block');
     } else {
         close_preload();
         News_arr = JSON.parse(News.responseText);
         News_Numm = Object.keys(News_arr).length;
 
-        for (var i = 1; i < News_Numm+1 ; i++) {
+        for (var i = 1; i < News_Numm + 1; i++) {
 
 
-          $("#layout").append(
-              '<div class="card">\
-                  <img src="'+News_arr[i]['image']+'">\
-                  <div class="title">'+News_arr[i].name+'</div>\
-                  <div class="text">'+News_arr[i].text+'</div>\
+            $("#layout").append(
+                '<div class="card">\
+                  <img src="' + News_arr[i]['image'] + '">\
+                  <div class="title">' + News_arr[i].name + '</div>\
+                  <div class="text">' + News_arr[i].text + '</div>\
               </div>\
               '
-          );
+            );
         }
     }
-
-
 
 
     //Нижний юлок
@@ -677,7 +618,7 @@ function stocks() {
         );
 
         $(".name-layout .exit").html('<i class="fas fa-sign-out-alt"></i>');
-    }else{
+    } else {
         $("#tabbar .login.profile").html(
             '<div onclick="login()" class="button">\
                 <div class="icon"><i class="far fa-user-circle"></i></div>\
@@ -710,7 +651,7 @@ function map() {
     $("metajs").html(
         '<script src="https://api-maps.yandex.ru/2.1/?apikey=4589713e-a8e5-4019-bd5a-e4de5fb76b1d&lang=ru_RU" type="text/javascript"></script>'
     );
-    $("#layout #map").css("height", $(document).height()-72-55);
+    $("#layout #map").css("height", $(document).height() - 72 - 55);
 
     //Функции map.js
     document.addEventListener("deviceready", onDeviceReady, false);
@@ -728,18 +669,21 @@ function map() {
 
         //Узнать включена ли локация?
         cordova.plugins.diagnostic.isLocationEnabled(successCallback, errorCallback);
-        function successCallback(res){
+
+        function successCallback(res) {
             //alert("Геолокация " + (res ? "включена" : "выключена"));
             !res ? cordova.plugins.diagnostic.switchToLocationSettings() : '';
         }
-        function errorCallback(err){
+
+        function errorCallback(err) {
             //alert("Ошибка: "+JSON.stringify(err));
         }
         //Конец включена ли локация?
 
-        var onSuccess = function(position) {
+        var onSuccess = function (position) {
 
             ymaps.ready(init);
+
             function init() {
                 var geolocation = ymaps.geolocation,
 
@@ -751,10 +695,10 @@ function map() {
                     });
 
                 geolocation.get({
-                    mapStateAutoApply: true
-                })
+                        mapStateAutoApply: true
+                    })
                     .then(
-                        function(result) {
+                        function (result) {
                             // Получение местоположения пользователя.
                             var userAddress = result.geoObjects.get(0).properties.get('text');
                             var userCoodinates = result.geoObjects.get(0).geometry.getCoordinates();
@@ -765,30 +709,29 @@ function map() {
                             });
                             myMap.geoObjects.add(result.geoObjects)
                         },
-                        function(err) {
+                        function (err) {
                             //console.log('Ошибка: ' + err)
                         }
                     );
 
                 var PointToMaps = new XMLHttpRequest();
 
-                PointToMaps.open('GET', 'https://app.maksf.ru/getmap.php', false);
+                PointToMaps.open('GET', 'https://app.rightbeer.ru/maps.json', false);
                 PointToMaps.send();
 
                 if (PointToMaps.status != 200) {
-                  $('#preload').css('display', 'block');
+                    $('#preload').css('display', 'block');
                 } else {
                     close_preload();
                     Point_arr = JSON.parse(PointToMaps.responseText);
                     Point_Numm = Object.keys(Point_arr).length;
-                    for (var i = 0; i < Point_Numm ; i++) {
+                    for (var i = 0; i < Point_Numm; i++) {
                         var pos_before = Point_arr[i].pos.split(' ')[0];
                         var pos_after = Point_arr[i].pos.split(' ')[1];
 
                         placemarki = new ymaps.Placemark([pos_after, pos_before], {
                             //balloonContentBody: '' +
-                            balloonContentBody:
-                                '<strong>Right</strong><br/>' +
+                            balloonContentBody: '<strong>Right</strong><br/>' +
                                 '<strong>Адрес: </strong>' + Point_arr[i].address + '<br/>' +
                                 '<strong>Время работы: </strong>' + Point_arr[i].openHour + '<br/>' +
                                 '<strong>Телефон: </strong><a href="tel:' + Point_arr[i].phone + '" >' + Point_arr[i].phone + '</a>'
@@ -816,7 +759,6 @@ function map() {
         };
 
 
-
         function onError(error) {
             //alert('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
         }
@@ -834,7 +776,7 @@ function map() {
             <div>'
         );
         $(".name-layout .exit").html('<i class="fas fa-sign-out-alt"></i>');
-    }else{
+    } else {
         $("#tabbar .login.profile").html(
             '<div onclick="login()" class="button">\
                 <div class="icon"><i class="far fa-user-circle"></i></div>\
@@ -850,54 +792,65 @@ function map() {
 }
 
 
-
-
 function close_preload() {
     $('#preload').removeClass('animation');
     $('#preload').css('display', 'block');
 
-    setTimeout(function(){$('#preload').addClass('animation');},250);
-    setTimeout(function(){$('#preload').removeClass('animation');$('#preload').css('display', 'none');},451);
+    setTimeout(function () {
+        $('#preload').addClass('animation');
+    }, 250);
+    setTimeout(function () {
+        $('#preload').removeClass('animation');
+        $('#preload').css('display', 'none');
+    }, 451);
 }
-
-
 
 
 function tabbar_onclick() {
     if (localStorage.account == "login") {
-        if (Page == "profile") {$("#tabbar .login.profile").html('<div class="button"><div class="icon"><i class="fas fa-barcode"></i></div><div class="name">Профиль</div><div>');}
-        else{$("#tabbar .login.profile").html('<div onclick="profile()" class="button"><div class="icon"><i class="fas fa-barcode"></i></div><div class="name">Профиль</div><div>');}
+        if (Page == "profile") {
+            $("#tabbar .login.profile").html('<div class="button"><div class="icon"><i class="fas fa-barcode"></i></div><div class="name">Профиль</div><div>');
+        } else {
+            $("#tabbar .login.profile").html('<div onclick="profile()" class="button"><div class="icon"><i class="fas fa-barcode"></i></div><div class="name">Профиль</div><div>');
+        }
         $(".name-layout .exit").html('<i class="fas fa-sign-out-alt"></i>');
-    }else{
-        if (Page == "login") {$("#tabbar .login.profile").html('<div class="button active"><div class="icon"><i class="far fa-user-circle"></i></div><div class="name">Войти</div><div>');}
-        else{$("#tabbar .login.profile").html('<div onclick="login()" class="button"><div class="icon"><i class="far fa-user-circle"></i></div><div class="name">Войти</div></div>');}
+    } else {
+        if (Page == "login") {
+            $("#tabbar .login.profile").html('<div class="button active"><div class="icon"><i class="far fa-user-circle"></i></div><div class="name">Войти</div><div>');
+        } else {
+            $("#tabbar .login.profile").html('<div onclick="login()" class="button"><div class="icon"><i class="far fa-user-circle"></i></div><div class="name">Войти</div></div>');
+        }
         $(".name-layout .exit").html('');
     }
-    if (Page == "news") {$("#tabbar .news").html('<div class="button"><div class="icon"><i class="far fa-newspaper"></i></div><div class="name">Новости</div></div>');
-    }else{$("#tabbar .news").html('<div onclick="news()" class="button"><div class="icon"><i class="far fa-newspaper"></i></div><div class="name">Новости</div></div>');}
-    if (Page == "stocks") {$("#tabbar .stocks").html('<div class="button"><div class="icon"><i class="fas fa-tags"></i></div><div class="name">Акции</div></div>');
-    }else{$("#tabbar .stocks").html('<div onclick="stocks()" class="button"><div class="icon"><i class="fas fa-tags"></i></div><div class="name">Акции</div></div>');}
-    if (Page == "map") {$("#tabbar .map").html('<div class="button"><div class="icon"><i class="far fa-map"></i></div><div class="name">Карта</div></div>');
-    }else{$("#tabbar .map").html('<div onclick="map()" class="button"><div class="icon"><i class="far fa-map"></i></div><div class="name">Карта</div></div>');}
+    if (Page == "news") {
+        $("#tabbar .news").html('<div class="button"><div class="icon"><i class="far fa-newspaper"></i></div><div class="name">Новости</div></div>');
+    } else {
+        $("#tabbar .news").html('<div onclick="news()" class="button"><div class="icon"><i class="far fa-newspaper"></i></div><div class="name">Новости</div></div>');
+    }
+    if (Page == "stocks") {
+        $("#tabbar .stocks").html('<div class="button"><div class="icon"><i class="fas fa-tags"></i></div><div class="name">Акции</div></div>');
+    } else {
+        $("#tabbar .stocks").html('<div onclick="stocks()" class="button"><div class="icon"><i class="fas fa-tags"></i></div><div class="name">Акции</div></div>');
+    }
+    if (Page == "map") {
+        $("#tabbar .map").html('<div class="button"><div class="icon"><i class="far fa-map"></i></div><div class="name">Карта</div></div>');
+    } else {
+        $("#tabbar .map").html('<div onclick="map()" class="button"><div class="icon"><i class="far fa-map"></i></div><div class="name">Карта</div></div>');
+    }
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-$('.exit').click(function() {
+$('.exit').click(function () {
     $('.exit').html('');
     delete localStorage.account;
-    User=false;
-    Page='login';
+    delete localStorage.FormPhone;
+    delete localStorage.FormHolder;
+    delete localStorage.FormBirthdate;
+    delete localStorage.Carduuid;
+    delete localStorage.CardBalance;
+    delete localStorage.CardNumber;
+    User = false;
+    Page = 'login';
     $("#tabbar .login.profile").html(
         '<div onclick="login()" class="button">\
             <div class="icon"><i class="far fa-user-circle"></i></div>\
