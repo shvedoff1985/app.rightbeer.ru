@@ -2,7 +2,7 @@ let User = false;
 First_exit = false;
 Phone = '';
 Page = 'login';
-Offline = 'true'
+i_connected = 'true'
 
 if (localStorage.account == "login") {
     User = true;
@@ -14,52 +14,13 @@ if (localStorage.account == "login") {
     login();
 }
 
-
-
 document.addEventListener("offline", onOffline, false);
 document.addEventListener("online", onLine, false);
-function onOffline() {
-    if (localStorage.CardNumber) {
-        Offline = false;
-        $('#ofline').html('');
-        $('#ofline').prepend('\
-            <div class="card">\
-                <div class="title">\
-                    ' + localStorage.FormHolder+ '\
-                </div>\
-                <div class="code">\
-                    <svg id="barcode"></svg>\
-                </div>\
-            </div>\
-        ');
-        JsBarcode("#barcode", localStorage.CardNumber);
-    }
-    $('#ofline').append('\
-        <h3>Плохое интернет соединение</h3>\
-    ');
-    $('#ofline').append('\
-        <img src="files/images/logo-dark.png" />\
-    ');
-    $('#ofline').css('display','block');
-}
-function onLine() {
-    if (Offline == 'false') {
-        $('#ofline').css('display','none');
-        $('#ofline').html('');
-    }else{
-        if (localStorage.account == "login") {
-            User = true;
-            Page = 'profile';
-            profile();
-        } else {
-            User = false;
-            Page = 'login';
-            login();
-        }
-        $('#ofline').css('display','none');
-        $('#ofline').html('');
-    }
-}
+
+function onOffline() {i_connected = 'fales';$('.noconnect').css('display', 'block');}
+function onLine() {i_connected = 'true';$('.noconnect').css('display', 'none');}
+
+
 
 //Главный прелоудер
 if (!First_exit) {
@@ -68,17 +29,16 @@ if (!First_exit) {
     }, 1350);
 } else {}
 
-
+//Окно с ошибкой
 function loaderror(text) {
     $('#error_code').css('display', 'block');
     $("#error_code").html(
         '<div class="block">\
             <h3>Ошибка</h3>\
-            <p>'+text+'</p>\
+            <p>' + text + '</p>\
         </div>\
-        <p style="text-align: center;"><i class="close far fa-times-circle"></i></p>'
+        <p style="text-align: center;z-index: 99;"><i class="close far fa-times-circle"></i></p>'
     );
-
     $(function () {
         $('#error_code .close').click(function () {
             $('#error_code').css('display', 'none');
@@ -87,20 +47,25 @@ function loaderror(text) {
 }
 
 
-function login() {
-    $('#preload').css('display', 'block');
 
+
+function login() {
     Page = 'login';
 
+    $('#preload').css('display', 'block');
+
     if (!User && Page == 'login') {
-        //Атрибут Page для layout
+
         $('#layout').removeAttr('page');
         $('#layout').attr('page', 'login');
-
         $("metajs").html('');
 
         //Название страницы
         $(".name-layout .name").html('Авторизация');
+
+
+        tabbar_onclick();
+        //Проверка кнопок
 
         //Загрузка контента
         $("#layout").html(
@@ -146,7 +111,7 @@ function login() {
 
         $(function () {
             $('#submit-mask').click(function () {
-                //$("#overlay").css("display", 'block');
+
                 $("#overlay").css("height", windowheight);
                 $(".PIN").css("margin-top", (windowheight - $(".PIN").height()) / 3 - 55 - 72);
 
@@ -155,9 +120,10 @@ function login() {
                 Phone = Phone.split('(').join('');
                 Phone = Phone.split(')').join('');
                 Phone = Phone.split('-').join('');
+
                 $.ajax({
                     type: 'POST',
-                    url: 'https://app.maksf.ru/getpin.php',
+                    url: 'https://app.rightbeer.ru/getpin.php',
                     data: {
                         phone: Phone,
                         Authorization: 'd3577f6c-05e4-430b-bfa9-561f4ad4b7ea',
@@ -167,8 +133,7 @@ function login() {
                         card = JSON.parse(data)
                         console.log(card);
                         if (card.message == "Карта не найдена") {
-                            //Карта не найдена
-                            //alert('В базе нет такого номера');
+
                             loaderror('В базе нет данного номера телефона. Обратитесь на кассу для оформления карты лояльности.');
                             $("#overlay").css("display", 'none');
                         } else {
@@ -190,10 +155,10 @@ function login() {
             if (xhr.status != 200) {
                 $("#overlay").css("display", 'none');
             } else {
+
                 pin = JSON.parse(xhr.responseText);
                 $("#overlay").css("display", 'block');
             }
-
             pincode_timer(60);
 
         }
@@ -210,7 +175,7 @@ function login() {
                     clearInterval(int); // очищаем интервал, чтобы он не продолжал работу при _Seconds = 0
                     $("#timer_close").html('Позвонить повторно');
                     $('#timer_close').click(function () {
-                        send_pin()
+                        send_pin();
                     });
                 }
             }, 1000);
@@ -218,19 +183,21 @@ function login() {
 
         $('.PIN').on('input', function () {
             if ($("#pin-mask").val().length == 7) {
+
                 pincode = $("#pin-mask").val();
                 pincode = pincode.split('-').join('');
-                //pin = pin.code;
-                pin = '999999';
-                pin = pin.substr(2, 6);
-                //console.log(pin.code+'-'+pin);
-                if (pincode == pin) {
+                pin1 = pin.code;
+
+                pin2 = pin1.substr(2, 6);
+
+                if (pincode == pin2) {
+
                     $("#overlay").css("display", 'none');
                     $("#overlay").html('');
                     Phone = $("#phone-mask").val();
                     authorization();
                 } else {
-                    //alert('Неверный код');
+
                     $("#pin-mask").addClass('animation');
                     setTimeout(function () {
                         $('#pin-mask').removeClass('animation');
@@ -255,23 +222,11 @@ function login() {
         });
     }
 
-    //Нижний юлок
-    $(".button").removeClass('active');
-    $("#tabbar .login.profile").html(
-        '<div onclick="login()" class="button active">\
-            <div class="icon"><i class="far fa-user-circle"></i></div>\
-            <div class="name">Войти</div>\
-        <div>'
-    );
-
-    tabbar_onclick();
-    //Проверка кнопок
 }
 
 
 function authorization() {
     $('#preload').css('display', 'block');
-    //alert(Phone);
     Phone = Phone.split('+').join('');
     Phone = Phone.split(' ').join('');
     Phone = Phone.split('(').join('');
@@ -286,7 +241,7 @@ function authorization() {
 
     $.ajax({
         type: 'POST',
-        url: 'https://app.maksf.ru/getcard.php',
+        url: 'https://app.rightbeer.ru/getcard.php',
         data: {
             phone: Phone,
             Authorization: 'd3577f6c-05e4-430b-bfa9-561f4ad4b7ea',
@@ -333,7 +288,7 @@ function RelBalance() {
 
         $.ajax({
             type: 'POST',
-            url: 'https://app.maksf.ru/getcard.php',
+            url: 'https://app.rightbeer.ru/getcard.php',
             data: {
                 phone: localStorage.FormPhone,
                 Authorization: 'd3577f6c-05e4-430b-bfa9-561f4ad4b7ea',
@@ -364,7 +319,12 @@ function profile() {
     RelBalance();
 
     setInterval(function () {
-        RelBalance();
+        if (i_connected == 'true') {
+                RelBalance();
+        }else{
+            $("#layout .reload").html('<b>' + localStorage.CardBalance + '</b>');
+        }
+
     }, 20000);
 
 
@@ -405,59 +365,59 @@ function profile() {
         </div>\
         ');
 
+    //Проверка кнопок
+    tabbar_onclick();
 
+    $("#tabbar .login .button").addClass('active');
+
+    //e56d44f9-135e-4fea-aa9a-90efd21a6872
     $.ajax({
         type: 'POST',
-        url: 'https://app.maksf.ru/getcheck.php',
+        url: 'https://app.rightbeer.ru/getcheck.php',
         data: {
-            Uuid: 'ba895b40-bd66-4e2f-bcdb-ae2d7309ff89' /*localStorage.Carduuid*/ ,
+            Uuid: localStorage.Carduuid /*'ba895b40-bd66-4e2f-bcdb-ae2d7309ff89'*/ ,
         },
         success: function (data) {
-            //alert(Math.round(new Date().getTime()/1000.0));
             Check_arr = JSON.parse(data);
             Check_Numm = Object.keys(Check_arr).length;
             console.log(Check_arr);
-            for (var i = 0; i < Check_Numm; i++) {
+            if (Check_Numm < 1) {
+
                 $(".check_card").append(
                     '<div class="cards">\
-                        <div class="text">Потрачено: <b>' + Check_arr[i].total + '</b> | Начислен бонусов: <b>' + Check_arr[i].bonus + '</b> | Номер платежа: <b>' + Check_arr[i].number + '</b> | Дата: <b>' + Check_arr[i].period + '</b></div>\
+                        <div class="text" style="text-align:center;">За этот месяц операций нет.</div>\
+                    </div>\
+                    '
+                );
+            }
+            for (var i = 0; i < Check_Numm; i++) {
+                let unix_timestamp = Check_arr[i].period;
+                var date = new Date(unix_timestamp * 1000);
+                var hours = date.getHours();
+                var year = date.getFullYear();
+                var mounth =  date.getMonth();
+                var data = date.getDate();
+                var minutes = "0" + date.getMinutes();
+                var seconds = "0" + date.getSeconds();
+                var formattedTime = year+'/'+mounth+'/'+data+ ' - '+ hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+
+                $(".check_card").append(
+                    '<div class="cards">\
+                        <div class="text">Потрачено: <b>' + Check_arr[i].total + '</b> | Начислен бонусов: <b>' + Check_arr[i].bonus + '</b> | Номер платежа: <b>' + Check_arr[i].number + '</b> | Дата: <b>' +formattedTime+ '</b></div>\
                     </div>\
                     '
                 );
             }
         },
         error: function (xhr, textStatus, error) {
-
+            $(".check_card").append(
+                '<div class="cards">\
+                    <div class="text" style="text-align:center;">Нет подключения к интернету</div>\
+                </div>\
+                '
+            );
         }
     });
-
-
-    /*
-    var News = new XMLHttpRequest();
-    News.open('GET', 'http://app.maksf.ru/getcheck.php', false);
-    News.send();
-    //console.log(News.responseText);
-    if (News.status != 200) {
-      $('#preload').css('display', 'block');
-    } else {
-        close_preload();
-        News_arr = JSON.parse(News.responseText);
-        News_Numm = Object.keys(News_arr).length;
-
-        for (var i = 1; i < News_Numm+1 ; i++) {
-
-
-          $("#layout").append(
-              '<div class="card">\
-                  <img src="'+News_arr[i]['image']+'">\
-                  <div class="title">'+News_arr[i].name+'</div>\
-                  <div class="text">'+News_arr[i].text+'</div>\
-              </div>\
-              '
-          );
-        }
-    }
-    */
 
     //'<br>\
     //Номер карты: ' +localStorage.CardNumber+ '<br>\
@@ -469,38 +429,15 @@ function profile() {
 
     JsBarcode("#barcode", localStorage.CardNumber);
 
-    //Нижний юлок
-    $(".button").removeClass('active');
-    if (localStorage.account == "login") {
-        $("#tabbar .login.profile").html(
-            '<div onclick="profile()" class="button">\
-                <div class="icon"><i class="fas fa-barcode"></i></div>\
-                <div class="name">Профиль</div>\
-            <div>'
-        );
-        $(".name-layout .exit").html('<i class="fas fa-sign-out-alt"></i>');
-    } else {
-        $("#tabbar .login.profile").html(
-            '<div onclick="login()" class="button">\
-                <div class="icon"><i class="far fa-user-circle"></i></div>\
-                <div class="name">Войти</div>\
-            </div>'
-        );
-    }
-
-    //Проверка кнопок
-    tabbar_onclick();
-
-    $("#tabbar .login .button").addClass('active');
 }
 
 function news() {
-
-    $("metajs").append('<script type="text/javascript" src="files/js/testing.js"></script>');
+    Page = 'news';
+    //$("metajs").append('<script type="text/javascript" src="files/js/testing.js"></script>');
 
     $('#preload').css('display', 'block');
 
-    Page = 'news';
+
     //Атрибут Page для layout
     $('#layout').removeAttr('page');
     $('#layout').attr('page', 'news');
@@ -513,65 +450,57 @@ function news() {
 
     $("#layout").html('<div class="lineP"></div>');
 
-
-    var News = new XMLHttpRequest();
-    News.open('GET', 'https://app.maksf.ru/news.php', false);
-    News.send();
-    //console.log(News.responseText);
-    if (News.status != 200) {
-        $('#preload').css('display', 'block');
-    } else {
-        close_preload();
-        News_arr = JSON.parse(News.responseText);
-        News_Numm = Object.keys(News_arr).length;
-
-        for (var i = 1; i < News_Numm + 1; i++) {
-
-
-            $("#layout").append(
-                '<div class="card">\
-                  <img src="' + News_arr[i]['image'] + '">\
-                  <div class="title">' + News_arr[i].name + '</div>\
-                  <div class="text">' + News_arr[i].text + '</div>\
-              </div>\
-              '
-            );
-        }
-    }
-
-
-    //Нижний юлок
-    $(".button").removeClass('active');
-    if (localStorage.account == "login") {
-        $("#tabbar .login.profile").html(
-            '<div onclick="profile()" class="button">\
-                <div class="icon"><i class="fas fa-barcode"></i></div>\
-                <div class="name">Профиль</div>\
-            <div>'
-        );
-        $(".name-layout .exit").html('<i class="fas fa-sign-out-alt"></i>');
-    } else {
-        $("#tabbar .login.profile").html(
-            '<div onclick="login()" class="button">\
-                <div class="icon"><i class="far fa-user-circle"></i></div>\
-                <div class="name">Войти</div>\
-            </div>'
-        );
-    }
-
     //Проверка кнопок
     tabbar_onclick();
 
     $("#tabbar .news .button").addClass('active');
+
+    var News = new XMLHttpRequest();
+    News.open('GET', 'https://app.rightbeer.ru//news.php', false);
+    News.send();
+    if (News.status != 200) {
+        $('#preload').css('display', 'block');
+        $("#layout").html(
+            '<div class="card">\
+              <div class="title">нет соединения с интернетом.</div>\
+          </div>\
+          '
+        );
+    } else {
+        close_preload();
+        News_arr = JSON.parse(News.responseText);
+        News_Numm = Object.keys(News_arr).length;
+        if (News_Numm < 1) {
+            $("#layout").append(
+                '<div class="card">\
+                  <div class="title">В данное время нет актуальных новостей</div>\
+              </div>\
+              '
+            );
+        }else{
+            for (var i = 1; i < News_Numm + 1; i++) {
+                $("#layout").append(
+                    '<div class="card">\
+                      <img src="' + News_arr[i]['image'] + '">\
+                      <div class="title">' + News_arr[i].name + '</div>\
+                      <div class="text">' + News_arr[i].text + '</div>\
+                  </div>\
+                  '
+                );
+            }
+        }
+
+    }
 
 
 }
 
 
 function stocks() {
+    Page = 'stocks';
     $('#preload').css('display', 'block');
 
-    Page = 'stocks';
+
     //Атрибут Page для layout
     $('#layout').removeAttr('page');
     $('#layout').attr('page', 'stocks');
@@ -584,63 +513,60 @@ function stocks() {
     $("#layout").html('<div class="lineP"></div>');
 
 
-    var News = new XMLHttpRequest();
-    News.open('GET', 'https://app.maksf.ru/stocks.php', false);
-    News.send();
-    //console.log(News.responseText);
-    if (News.status != 200) {
-        $('#preload').css('display', 'block');
-    } else {
-        close_preload();
-        News_arr = JSON.parse(News.responseText);
-        News_Numm = Object.keys(News_arr).length;
-
-        for (var i = 1; i < News_Numm + 1; i++) {
-
-
-            $("#layout").append(
-                '<div class="card">\
-                  <img src="' + News_arr[i]['image'] + '">\
-                  <div class="title">' + News_arr[i].name + '</div>\
-                  <div class="text">' + News_arr[i].text + '</div>\
-              </div>\
-              '
-            );
-        }
-    }
-
-
-    //Нижний юлок
-    $(".button").removeClass('active');
-    if (localStorage.account == "login") {
-        $("#tabbar .login.profile").html(
-            '<div onclick="profile()" class="button">\
-                <div class="icon"><i class="fas fa-barcode"></i></div>\
-                <div class="name">Профиль</div>\
-            <div>'
-        );
-
-        $(".name-layout .exit").html('<i class="fas fa-sign-out-alt"></i>');
-    } else {
-        $("#tabbar .login.profile").html(
-            '<div onclick="login()" class="button">\
-                <div class="icon"><i class="far fa-user-circle"></i></div>\
-                <div class="name">Войти</div>\
-            </div>'
-        );
-    }
-
     //Проверка кнопок
     tabbar_onclick();
 
     $("#tabbar .stocks .button").addClass('active');
+
+
+    var News = new XMLHttpRequest();
+    News.open('GET', 'https://app.rightbeer.ru/stocks.php', false);
+    News.send();
+
+    if (News.status != 200) {
+        $('#preload').css('display', 'block');
+        $("#layout").html(
+            '<div class="card">\
+              <div class="title">нет соединения с интернетом.</div>\
+          </div>\
+          '
+        );
+    } else {
+        close_preload();
+        News_arr = JSON.parse(News.responseText);
+        News_Numm = Object.keys(News_arr).length;
+        if (News_Numm < 1) {
+            $("#layout").append(
+                '<div class="card">\
+                  <div class="title">В данное время нет актуальных новостей</div>\
+              </div>\
+              '
+            );
+        }else{
+            for (var i = 1; i < News_Numm + 1; i++) {
+                $("#layout").append(
+                    '<div class="card">\
+                      <img src="' + News_arr[i]['image'] + '">\
+                      <div class="title">' + News_arr[i].name + '</div>\
+                      <div class="text">' + News_arr[i].text + '</div>\
+                  </div>\
+                  '
+                );
+            }
+        }
+
+    }
+
+
 }
 
 
 function map() {
+    Page = 'map';
+
     $('#preload').css('display', 'block');
 
-    Page = 'map';
+
     //Атрибут Page для layout
     $('#layout').removeAttr('page');
     $('#layout').attr('page', 'map');
@@ -651,6 +577,11 @@ function map() {
     $("#layout").html(
         '<div id="map" style="width: 100%;"></div>'
     );
+    //Проверка кнопок
+    tabbar_onclick();
+
+    $("#tabbar .map .button").addClass('active');
+
     $("metajs").html(
         '<script src="https://api-maps.yandex.ru/2.1/?apikey=4589713e-a8e5-4019-bd5a-e4de5fb76b1d&lang=ru_RU" type="text/javascript"></script>'
     );
@@ -674,14 +605,11 @@ function map() {
         cordova.plugins.diagnostic.isLocationEnabled(successCallback, errorCallback);
 
         function successCallback(res) {
-            //alert("Геолокация " + (res ? "включена" : "выключена"));
             !res ? cordova.plugins.diagnostic.switchToLocationSettings() : '';
         }
 
         function errorCallback(err) {
-            //alert("Ошибка: "+JSON.stringify(err));
         }
-        //Конец включена ли локация?
 
         var onSuccess = function (position) {
 
@@ -763,35 +691,11 @@ function map() {
 
 
         function onError(error) {
-            //alert('code: '    + error.code    + '\n' + 'message: ' + error.message + '\n');
         }
         navigator.geolocation.getCurrentPosition(onSuccess, onError, options);
     }
 
 
-    //Нижний юлок
-    $(".button").removeClass('active');
-    if (localStorage.account == "login") {
-        $("#tabbar .login.profile").html(
-            '<div onclick="profile()" class="button">\
-                <div class="icon"><i class="fas fa-barcode"></i></div>\
-                <div class="name">Профиль</div>\
-            <div>'
-        );
-        $(".name-layout .exit").html('<i class="fas fa-sign-out-alt"></i>');
-    } else {
-        $("#tabbar .login.profile").html(
-            '<div onclick="login()" class="button">\
-                <div class="icon"><i class="far fa-user-circle"></i></div>\
-                <div class="name">Войти</div>\
-            </div>'
-        );
-    }
-
-    //Проверка кнопок
-    tabbar_onclick();
-
-    $("#tabbar .map .button").addClass('active');
 }
 
 
@@ -841,6 +745,15 @@ function tabbar_onclick() {
         $("#tabbar .map").html('<div onclick="map()" class="button"><div class="icon"><i class="far fa-map"></i></div><div class="name">Карта</div></div>');
     }
 }
+
+
+
+
+
+
+
+
+
 
 
 $('.exit').click(function () {
