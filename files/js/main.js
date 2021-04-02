@@ -194,7 +194,7 @@ function login() {
                 $("#overlay").css("display", 'block');
             }
 
-            pincode_timer(200);
+            pincode_timer(60);
 
         }
 
@@ -495,6 +495,9 @@ function profile() {
 }
 
 function news() {
+
+    $("metajs").append('<script type="text/javascript" src="files/js/testing.js"></script>');
+
     $('#preload').css('display', 'block');
 
     Page = 'news';
@@ -512,7 +515,7 @@ function news() {
 
 
     var News = new XMLHttpRequest();
-    News.open('GET', 'https://app.maksf.ru/newsы.php', false);
+    News.open('GET', 'https://app.maksf.ru/news.php', false);
     News.send();
     //console.log(News.responseText);
     if (News.status != 200) {
